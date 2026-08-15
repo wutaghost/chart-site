@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHART - 可人工审计的评审校准记录</title>
+<meta name="description" content="CHART 把 review 的文字理由、论文证据、rubric 约束和提交分数组织成一份可追踪、可审计的结构化记录。它不是自动审稿人。">
+<meta property="og:title" content="CHART - 可人工审计的评审校准记录">
+<meta property="og:description" content="当 review 的文字理由和数字评分开始脱节时，CHART 把这个 gap 转化为一份可人工审计的评审校准记录。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=13">
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">跳到主要内容</a>
+
+<header class="nav">
+  <div class="shell nav-in">
+    <a class="brand" href="#top"><b>CHART</b><span data-i18n="brand.sub">calibrated review trace</span></a>
+    <nav class="nav-links" data-i18n-attr="aria-label:aria.nav" aria-label="主导航">
+      <a href="#demo" data-i18n="nav.demo">诊断流程</a>
+      <a href="#checks" data-i18n="nav.checks">检查项</a>
+      <a href="#venues" data-i18n="nav.venues">支持的 venue</a>
+    </nav>
+    <div class="nav-right">
+      <div class="seg seg-lang" role="tablist" data-i18n-attr="aria-label:lang.label" aria-label="语言">
+        <button class="seg-btn lang-btn" role="tab" data-locale="zh" aria-selected="true">中文</button>
+        <button class="seg-btn lang-btn" role="tab" data-locale="en" aria-selected="false">EN</button>
+      </div>
+      <a class="btn btn-ghost" href="https://github.com/wutaghost/chart-review">GitHub</a>
+      <a class="btn btn-primary" href="#demo" data-i18n="nav.cta">查看诊断流程</a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobilePanel" data-i18n="nav.menu">菜单</button>
+    </div>
+  </div>
+</header>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#demo" data-i18n="nav.demo">诊断流程</a>
+  <a href="#checks" data-i18n="nav.checks">检查项</a>
+  <a href="#venues" data-i18n="nav.venues">支持的 venue</a>
+  <a href="https://github.com/wutaghost/chart-review">GitHub</a>
+</div>
+
+<main id="main">
+<span id="top"></span>
+<section class="hero">
+  <div class="shell hero-grid">
+    <div>
+      <h1 data-i18n-html="hero.h1_html">评分和理由脱节时，<em>先把落差记录清楚。</em></h1>
+      <p class="hero-sub" data-i18n="hero.sub">CHART 把文字理由、论文证据、rubric 约束和提交分数组织成一份结构化记录，供 reviewer 和 AC 人工检查。</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="#demo" data-i18n="hero.cta1">查看诊断流程</a>
+        <a class="btn btn-ghost btn-lg" href="https://github.com/wutaghost/chart-review#readme" data-i18n="hero.cta2">阅读 README</a>
+      </div>
+    </div>
+    <div class="term">
+      <div class="term-bar"><span>run_pipeline.py</span><span>·</span><span data-i18n="hero.termbar">真实 provider 运行</span></div>
+<pre class="term-body"><span class="c">$</span> python scripts/run_pipeline.py \
+    --paper outputs/experiment_inputs/llmscoring1 \
+    --paper-pdf data/fixtures/LLMScoring1_paper.pdf \
+    --venue icml --rebuttal-mode exclude
+
+<b>llmscoring1</b>  icml  <span class="c">4 reviews, 0 failed</span>
+<span class="c">submitted</span>      Rating 2 / 3 / 4 / 5   <span class="c">span</span> <i>3.0</i>
+<span class="c">paper</span>          user_pdf  <i>76796 chars</i>
+
+<b>review_156R</b>  <span class="c">care_plan:</span> reviewer_calibration_challenge
+<span class="c">anchor range</span>   <i>4.0 - 5.0</i>  residual <i>-1.0</i>  severity <i>low</i>
+<span class="c">direction</span>      score_lower_than_rationale_supports
+<span class="c">stability</span>      stable  <span class="c">(3 samples, direction 100%)</span>
+<span class="c">evidence</span>       3 claims unverifiable  <span class="c">(too general to locate)</span>
+<span class="c">rubric</span>         dominant=none, balanced
+
+<u>wrote</u> llmscoring1_paper.json  <span class="c">4 CaseReports</span>
+<span class="c">needs_ac_attention</span> <i>true</i>  <span class="c">items</span> A003, A001
+</pre>
+    </div>
+  </div>
+</section>
+<section class="bounds">
+  <div class="shell bounds-in">
+    <span class="bounds-label" data-i18n="bounds.label">这套系统明确不做：</span>
+    <span class="chip" data-i18n="bounds.1">替代 reviewer</span>
+    <span class="chip" data-i18n="bounds.2">替代 AC</span>
+    <span class="chip" data-i18n="bounds.3">决定论文是否接收</span>
+    <span class="chip" data-i18n="bounds.4">从零生成 review</span>
+    <span class="chip" data-i18n="bounds.5">把 anchor score 当作质量真值</span>
+  </div>
+</section>
+<section class="pad" id="demo">
+  <div class="shell">
+    <div class="demo-head reveal">
+      <div>
+        <h2 class="h2" id="demoTitle">一条 review 走完五步，每一步都留下可核对的中间结果。</h2>
+        <p class="lede" id="demoLede">下面是 <code class="mono">review_156R</code> 的真实 provider 运行结果，论文以 PDF 形式提交，抽取正文 76,796 字符。分数、区间和 rubric 判断来自确定性 Python 规则，不是页面上的装饰数字。</p>
+      </div>
+      <div class="seg" role="tablist" data-i18n-attr="aria-label:aria.view" aria-label="切换视角">
+        <button class="seg-btn" role="tab" id="viewReviewer" aria-selected="true" aria-controls="viewPanels" data-i18n="demo.seg.reviewer">给 reviewer</button>
+        <button class="seg-btn" role="tab" id="viewAc" aria-selected="false" aria-controls="viewPanels" data-i18n="demo.seg.ac">给 AC</button>
+      </div>
+    </div>
+
+    <div id="viewPanels">
+    <div class="panel reveal" id="panelReviewer">
+      <div class="panel-grid">
+        <div class="rail" role="tablist" data-i18n-attr="aria-label:aria.rail" aria-label="诊断步骤">
+          <div class="rail-title" data-i18n="rail.title">Pipeline</div>
+          <button class="step" role="tab" id="tab-0" aria-controls="stage-0" aria-current="true">
+            <span class="step-num">1</span>
+            <span><span class="step-name" data-i18n="rail.0">加载 review</span><span class="step-meta">loaders.py</span></span>
+          </button>
+          <button class="step" role="tab" id="tab-1" aria-controls="stage-1">
+            <span class="step-num">2</span>
+            <span><span class="step-name" data-i18n="rail.1">计算 anchor range</span><span class="step-meta">score_anchor</span></span>
+          </button>
+          <button class="step" role="tab" id="tab-2" aria-controls="stage-2">
+            <span class="step-num">3</span>
+            <span><span class="step-name" data-i18n="rail.2">核查证据支撑</span><span class="step-meta">evidence_grounding</span></span>
+          </button>
+          <button class="step" role="tab" id="tab-3" aria-controls="stage-3">
+            <span class="step-num">4</span>
+            <span><span class="step-name" data-i18n="rail.3">检查 rubric 权重</span><span class="step-meta">rubric_weight</span></span>
+          </button>
+          <button class="step" role="tab" id="tab-4" aria-controls="stage-4">
+            <span class="step-num">5</span>
+            <span><span class="step-name" data-i18n="rail.4">生成校准记录</span><span class="step-meta">submit_diagnosis</span></span>
+          </button>
+        </div>
+
+        <div class="stage">
+          <div class="stage-body" id="stageBody"><!-- STAGES --></div>
+          <div class="runbar">
+            <button class="btn btn-primary btn-sm" id="runBtn" data-i18n="run.btn">运行诊断</button>
+            <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+            <div class="nav-pair">
+              <button class="btn btn-ghost btn-sm" id="prevBtn" disabled data-i18n="run.prev">上一步</button>
+              <button class="btn btn-ghost btn-sm" id="nextBtn" data-i18n="run.next">下一步</button>
+            </div>
+            <span class="runbar-note" id="runNote">idle</span>
+          </div>
+          <div class="log" id="log" aria-live="polite" data-i18n-attr="aria-label:run.logLabel" aria-label="运行日志"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel reveal" id="panelAc" hidden>
+      <div class="ac-head">
+        <div>
+          <div class="ac-eyebrow">paper llmscoring1 · icml · run paper-post-20260629-115601</div>
+          <h3 class="ac-title" data-i18n="ac.title">4 条 review 放在一起，只列出与决策相关的分歧。</h3>
+        </div>
+        <div class="ac-gate">
+          <span class="badge badge-hot">needs_ac_attention = true</span>
+        </div>
+      </div>
+
+      <div class="ac-body">
+        <div class="figframe figframe-wide">
+          <!-- Not lazy: it sits inside a panel that starts hidden, and a
+               lazy image in a hidden subtree never enters the viewport. -->
+          <img src="assets/paper-ac-selection-workflow.svg" data-i18n-attr="alt:ac.figalt" alt="Paper-level AC candidate selection：多条 review 并行诊断后合并为候选池，经 paper planner 与 AC gate 选出条目，输出 PaperReport 与 AC validation 工作表" width="2100" height="730">
+        </div>
+        <p class="stage-note" data-i18n="ac.fignote">四条 review 并行诊断（最多 4 路并发），失败的 review 被隔离，只有完整诊断进入候选生成。单条 review 内部的 specialist 仍是顺序执行。</p>
+
+        <dl class="kv">
+          <div><dt data-i18n="ac.k.span">score span</dt><dd class="accent">3.0</dd></div>
+          <div><dt data-i18n="ac.k.reviews">reviews</dt><dd data-i18n="ac.v.reviews">4 · 0 failed</dd></div>
+          <div><dt data-i18n="ac.k.items">attention items</dt><dd>2</dd></div>
+          <div><dt data-i18n="ac.k.model">model requested</dt><dd>true</dd></div>
+        </dl>
+
+        <div class="flag"><b>gate</b><span data-i18n="ac.gate">score_span=3 exceeds 25% of scale　·　selected_ac_attention_items=A003, A001。
+        门控条件写在报告里，AC 可以判断这次升级是否合理。</span></div>
+
+        <div class="rtable-wrap" tabindex="0" role="group" data-i18n-attr="aria-label:ac.tscroll" aria-label="review 对照表，可横向滚动">
+        <table class="rtable">
+          <caption data-i18n="ac.tcap">四条 review 的提交分数与各自的 anchor 结论</caption>
+          <thead>
+            <tr><th scope="col">review</th><th scope="col">score</th><th scope="col">conf</th><th scope="col">anchor</th><th scope="col">residual</th><th scope="col">severity</th><th scope="col">care plan</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">review_v6RF</th><td>2</td><td>4</td><td>2.0 - 3.0</td><td>0.0</td><td class="faint">none</td><td>ac_risk_note</td></tr>
+            <tr class="mark"><th scope="row">review_156R</th><td>3</td><td>4</td><td>4.0 - 5.0</td><td class="accent">-1.0</td><td>low</td><td>reviewer_calibration_challenge</td></tr>
+            <tr><th scope="row">review_Fff5</th><td>4</td><td>4</td><td>4.0 - 4.0</td><td>0.0</td><td class="faint">none</td><td>routine_record</td></tr>
+            <tr class="mark"><th scope="row">review_gr3d</th><td>5</td><td>4</td><td>3.0 - 4.0</td><td class="accent">+1.0</td><td>low</td><td>explain_weighting</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="stage-note" data-i18n="ac.tnote">分数从 2 到 5，但跨度本身不是结论。系统只把其中两条升级为需要 AC 核实的条目。</p>
+
+        <div class="ac-items">
+          <article class="ac-item">
+            <div class="ac-item-top">
+              <span class="mono ac-id">A003</span>
+              <span class="badge badge-hot">high</span>
+              <span class="ac-kind">single_review_concern · under_supported_claim · review_v6RF</span>
+            </div>
+            <h4>Unsupported decisive claim in review review_v6RF</h4>
+            <div class="quote"><span data-i18n="ac.quote.label">review 里的原始判断</span>The entire Empirical Evidence section is useless because the LLM scores on ICLR 2023/2024 data are contaminated by pretraining data.</div>
+            <p>Review review_v6RF uses this claim as a material reason for its assessment, but the review does not provide enough checkable support to establish its scope or decision weight.</p>
+            <div class="ac-q">
+              <b data-i18n="ac.q.label">需要 AC 核实</b>
+              <ol>
+                <li>Which specific LLMs were used and their training data cutoffs.</li>
+                <li>Evidence that ICLR 2023/2024 papers were included in those models’ pretraining corpora.</li>
+                <li>Quantitative indication of score inflation on those years vs. uncontaminated data.</li>
+                <li>Explanation of why contamination fully invalidates the results rather than merely biasing them.</li>
+                <li>If verified, how much of the overall recommendation depends on it?</li>
+              </ol>
+            </div>
+            <p class="ac-impact"><b data-i18n="ac.impact.label">decision impact</b>If the claim is substantiated and materially affects the paper’s main contribution, it may justify the review’s recommendation; if it remains unsupported or narrow in scope, it should not carry decisive weight.</p>
+            <div class="ac-val">
+              <span>ac_validation</span>
+              <div class="ac-val-row"><i data-i18n="ac.val.exists">exists</i><em data-i18n="ac.yes">Yes</em><em data-i18n="ac.no">No</em><em data-i18n="ac.uncertain">Uncertain</em></div>
+              <div class="ac-val-row"><i data-i18n="ac.val.useful">useful for AC decision</i><em data-i18n="ac.yes">Yes</em><em data-i18n="ac.no">No</em><em data-i18n="ac.uncertain">Uncertain</em></div>
+              <div class="ac-val-row"><i data-i18n="ac.val.comment">comment</i><u></u></div>
+            </div>
+          </article>
+
+          <article class="ac-item">
+            <div class="ac-item-top">
+              <span class="mono ac-id">A001</span>
+              <span class="badge">medium</span>
+              <span class="ac-kind">single_review_concern · unexplained_rubric_weight · review_gr3d</span>
+            </div>
+            <h4>Unexplained rubric weighting in review review_gr3d</h4>
+            <div class="quote"><span data-i18n="ac.quote.label">review 里的原始判断</span>The overall score of 5.0 is markedly higher than all dimension scores (support, significance, argument_clarity, related_work all 3; discussion_potential 4), suggesting discussion_potential received decisive weight without explanation for why it alone drove a high overall.</div>
+            <p>Review review_gr3d appears to let discussion_potential control the recommendation without explaining why that dimension should outweigh the remaining assessment.</p>
+            <div class="ac-q">
+              <b data-i18n="ac.q.label">需要 AC 核实</b>
+              <ol>
+                <li>Which rubric dimension is intended to be decisive for the recommendation?</li>
+                <li>Why should that dimension outweigh the other scored dimensions in this case?</li>
+              </ol>
+            </div>
+            <p class="ac-impact"><b data-i18n="ac.impact.label">decision impact</b>If the dominant dimension is explicitly decisive under the venue rubric, the recommendation may be coherent; otherwise the AC may need to rebalance the review against the other dimensions.</p>
+            <div class="ac-val">
+              <span>ac_validation</span>
+              <div class="ac-val-row"><i data-i18n="ac.val.exists">exists</i><em data-i18n="ac.yes">Yes</em><em data-i18n="ac.no">No</em><em data-i18n="ac.uncertain">Uncertain</em></div>
+              <div class="ac-val-row"><i data-i18n="ac.val.useful">useful for AC decision</i><em data-i18n="ac.yes">Yes</em><em data-i18n="ac.no">No</em><em data-i18n="ac.uncertain">Uncertain</em></div>
+              <div class="ac-val-row"><i data-i18n="ac.val.comment">comment</i><u></u></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="flag flag-ok"><b>note</b><span><span data-i18n="ac.note">ac_validation 三个字段在报告里是空的，由 AC 填写。系统不预填、不代答，也不记录“正确答案”。</span>
+        <span data-i18n-html="ac.note2_html">这份 brief 同时写入 <code class="mono">llmscoring1_paper.json</code> 的 ac_note 字段，可直接导出给 AC。</span></span></div>
+      </div>
+    </div>
+    </div>
+
+    <div class="bounds-in reveal" style="padding-top:26px">
+      <span class="bounds-label" data-i18n="demo.bounds.label">页面演示的边界：</span>
+      <span class="chip" data-i18n="demo.bounds.1">不联网</span>
+      <span class="chip" data-i18n="demo.bounds.2">不上传 review</span>
+      <span class="chip" data-i18n="demo.bounds.3">不需要 API key</span>
+      <span class="chip" data-i18n="demo.bounds.4">不代替人工判断</span>
+    </div>
+  </div>
+</section>
+<section class="pad" id="checks">
+  <div class="shell">
+    <div class="reveal">
+      <h2 class="h2" data-i18n="checks.h2">四类问题，都以能被反驳的形式写出来。</h2>
+      <p class="lede" data-i18n="checks.lede">每一项都指向 review 里的具体位置，说明缺什么、和什么冲突。发现 mismatch 不等于判定 reviewer 错了。</p>
+    </div>
+
+    <div class="bento reveal">
+      <div class="cell">
+        <h3 data-i18n="checks.1.h3">分数与理由不一致</h3>
+        <p data-i18n="checks.1.p">文字理由支持的 anchor 区间和 reviewer 提交分数不在同一位置，并记录方向、残差与 severity。</p>
+        <div class="gauge">
+          <div class="gauge-row"><b>4.0-5.0</b><span data-i18n="checks.1.r1">anchor range</span></div>
+          <div class="gauge-row" style="margin-top:8px"><b class="accent">-1.0</b><span data-i18n="checks.1.r2">residual, submitted 3</span></div>
+          <div class="gauge-row" style="margin-top:8px"><b>low</b><span data-i18n="checks.1.r3">severity, stable, direction 100%</span></div>
+        </div>
+      </div>
+
+      <div class="cell">
+        <h3 data-i18n="checks.2.h3">证据缺口</h3>
+        <p data-i18n="checks.2.p">关键判断缺少论文证据，或与论文内容冲突。论文在手时仍可能不可核实，因为 review 的表述无法定位到具体位置。</p>
+        <div class="dims">
+          <div class="hot"><span>unverifiable</span><b>3 / 3</b></div>
+          <div><span>paper_available</span><b>true</b></div>
+          <div><span>claim type</span><b>experiments_insufficient</b></div>
+          <div><span data-i18n="checks.2.k4">每条缺失项</span><b data-i18n="checks.2.v4">逐条列出</b></div>
+          <div><span>review</span><b>review_156R · 3 / 6</b></div>
+        </div>
+      </div>
+
+      <div class="cell">
+        <h3 data-i18n="checks.3.h3">Rubric 权重问题</h3>
+        <p data-i18n="checks.3.p">某个维度被赋予决定性权重，但 review 没有解释原因。系统只标注这个空缺，不改写权重。同一篇论文的另一条 review 命中了这一类。</p>
+        <div class="dims">
+          <div class="hot"><span>dominant</span><b>discussion_potential</b></div>
+          <div><span>status</span><b>unexplained_high_weight</b></div>
+          <div><span data-i18n="checks.3.k3">维度分</span><b>3 / 3 / 4 / 3 / 3</b></div>
+          <div><span data-i18n="checks.3.k4">overall</span><b data-i18n="checks.3.v4">5，高于全部维度分</b></div>
+          <div><span>review</span><b>review_gr3d · 5 / 6</b></div>
+        </div>
+      </div>
+
+      <div class="cell cell-fig">
+        <div class="figframe">
+          <!-- 7 KB SVG; eager avoids a lazy image that never resolves when
+               it is inside a collapsed or hidden container. -->
+          <img src="assets/review-diagnosis-workflow.svg" data-i18n-attr="alt:checks.4.alt" alt="Review diagnosis workflow：从加载 review 到 anchor 计算、证据核查、rubric 检查，最后经 reliability gate 输出报告">
+        </div>
+        <div class="figcap">
+          <h3 data-i18n="checks.4.h3">四类检查串在一条流水线上</h3>
+          <p data-i18n="checks.4.p">anchor、证据、rubric 三个 specialist 由 planner 依次调度，结果汇总后经 reliability gate 才写出报告。门控不通过时记录降级为 degraded，而不是悄悄输出一份看起来完整的结论。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="pad">
+  <div class="shell">
+    <div class="reveal">
+      <h2 class="h2" data-i18n="soap.h2">结构借自临床病历，不是借自打分器。</h2>
+      <p class="lede" data-i18n="soap.lede">医生不会只写一个最终判断，而是把主观陈述、可观察证据、专业评估和后续处理分开记录。CHART 把 SOAP 这套记录逻辑迁移到评审校准上。</p>
+    </div>
+
+    <div class="soap reveal">
+      <div class="soap-row">
+        <span class="mono">S</span>
+        <h3><span data-i18n="soap.s.h3">Subjective rationale</span><small data-i18n="soap.s.small">reviewer 写下什么</small></h3>
+        <div>
+          <p data-i18n="soap.s.p">summary、strengths、weaknesses、questions 和评分理由，按原文保留，不做改写或润色。</p>
+          <div class="fields"><span>summary</span><span>strengths</span><span>weaknesses</span><span>questions</span><span>submitted_score</span><span>confidence</span><span>dimension_scores</span></div>
+        </div>
+      </div>
+      <div class="soap-row">
+        <span class="mono">O</span>
+        <h3><span data-i18n="soap.o.h3">Objective evidence</span><small data-i18n="soap.o.small">可核查的部分</small></h3>
+        <div>
+          <p data-i18n="soap.o.p">论文文本、venue rubric、评分尺度，以及可以被指认到具体位置的 paper evidence。</p>
+          <div class="fields"><span>paper_text</span><span>paper_source</span><span>paper_text_chars</span><span>score_scale</span><span>rubric</span><span>rebuttal_mode</span></div>
+        </div>
+      </div>
+      <div class="soap-row">
+        <span class="mono">A</span>
+        <h3><span data-i18n="soap.a.h3">Assessment</span><small data-i18n="soap.a.small">关系是否成立</small></h3>
+        <div>
+          <p data-i18n="soap.a.p">检查文字理由是否支持提交分数，识别 mismatch、证据缺口和 rubric 权重问题，并记录自一致性。</p>
+          <div class="fields"><span>anchor_range</span><span>residual</span><span>mismatch_direction</span><span>severity</span><span>stability</span><span>key_claims</span><span>weighting_status</span></div>
+        </div>
+      </div>
+      <div class="soap-row">
+        <span class="mono">P</span>
+        <h3><span data-i18n="soap.p.h3">Plan</span><small data-i18n="soap.p.small">接下来谁做什么</small></h3>
+        <div>
+          <p data-i18n="soap.p.p">生成 reviewer 或 AC 可以继续处理的 follow-up：补证据、解释权重、调整分数，或只留档。</p>
+          <div class="fields"><span>care_plan</span><span>choice</span><span>revised_score</span><span>added_justification</span><span>residual_before</span><span>residual_after</span><span>resolved</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="pad" id="venues">
+  <div class="shell">
+    <div class="reveal">
+      <h2 class="h2" data-i18n="venues.h2">评分尺度按 venue 实际 rubric 转写。</h2>
+      <p class="lede" data-i18n="venues.lede">主评分字段和尺度直接决定 anchor 区间怎么算，因此每个 venue 单独维护，而不是共用一张通用换算表。</p>
+      <p class="stat-line" data-i18n-html="venues.stat_html">3 个 venue · <b>3</b> 套主评分尺度 · 3 类 LLM provider · 未配置 embedding 时回退 <b>BM25</b></p>
+    </div>
+
+    <div class="vgrid reveal">
+      <div class="vcard">
+        <div class="vcard-top"><b>ICLR</b><span class="badge" data-i18n="venues.badge">已支持</span></div>
+        <p data-i18n="venues.iclr.p">主评分字段 Rating，尺度 1-10，reject ceiling 5、accept floor 6。</p>
+        <div class="tags"><span class="tag">Rating 1-10</span><span class="tag">Confidence 1-5</span><span class="tag">OpenReview</span></div>
+      </div>
+      <div class="vcard">
+        <div class="vcard-top"><b>NeurIPS</b><span class="badge" data-i18n="venues.badge">已支持</span></div>
+        <p data-i18n="venues.neurips.p">主评分字段 Overall，尺度 1-6，附带 per-axis 维度分。</p>
+        <div class="tags"><span class="tag">Overall 1-6</span><span class="tag">Confidence 1-5</span></div>
+      </div>
+      <div class="vcard">
+        <div class="vcard-top"><b>ICML</b><span class="badge" data-i18n="venues.badge">已支持</span></div>
+        <p data-i18n="venues.icml.p">主评分字段 Rating，尺度 1-6，含 Support / Significance / Discussion 等 1-4 维度。</p>
+        <div class="tags"><span class="tag">Rating 1-6</span><span class="tag" data-i18n="venues.icml.t2">5 维度</span><span class="tag" data-i18n="venues.icml.t3">本地 .txt</span></div>
+      </div>
+      <div class="vcard">
+        <div class="vcard-top"><b>DeepSeek</b><span class="badge" data-i18n="venues.badge">已支持</span></div>
+        <p data-i18n="venues.deepseek.p">通过 CHART_PROVIDER 指定。单 provider 配置时可留空。</p>
+        <div class="tags"><span class="tag">chat completions</span></div>
+      </div>
+      <div class="vcard">
+        <div class="vcard-top"><b data-i18n="venues.openai.name">OpenAI 兼容</b><span class="badge" data-i18n="venues.badge">已支持</span></div>
+        <p data-i18n="venues.openai.p">任意 OpenAI-compatible base URL，配合 CHART_MODEL 指定模型。</p>
+        <div class="tags"><span class="tag" data-i18n="venues.openai.t1">base URL 可换</span><span class="tag" data-i18n="venues.openai.t2">embedding 可选</span></div>
+      </div>
+      <div class="vcard">
+        <div class="vcard-top"><b>Anthropic</b><span class="badge" data-i18n="venues.badge">已支持</span></div>
+        <p data-i18n="venues.anthropic.p">与其他 provider 共用同一套 agent 调用边界和输入长度限制。</p>
+        <div class="tags"><span class="tag">messages API</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="close">
+  <div class="shell reveal">
+    <h2 class="h2" data-i18n="close.h2">先用 fixture 跑一遍，再决定要不要接自己的数据。</h2>
+    <p class="lede" data-i18n-html="close.lede_html">安装依赖后加上 <code class="mono">--mock</code> 就能跑完整流程，不需要 API key、不联网、不消耗 token。上面展示的那条记录换成真实 provider 只需要去掉 <code class="mono">--mock</code> 并补上 <code class="mono">--paper-pdf</code>。</p>
+    <div class="close-grid">
+<pre class="term-body close-term"><span class="c" data-i18n="close.term.c1"># 1. 安装依赖，Python 3.10-3.12</span>
+$ pip install -r requirements.txt
+
+<span class="c" data-i18n="close.term.c2"># 2. 离线跑通 fixture</span>
+$ python scripts/run_pipeline.py \
+    --txt data/fixtures/review_v6RF.txt \
+    --venue icml --mock
+
+<span class="c" data-i18n="close.term.c3"># 3. 换成真实 provider 与论文 PDF</span>
+$ python scripts/run_pipeline.py \
+    --txt data/fixtures/review_156R.txt \
+    --paper-pdf data/fixtures/LLMScoring1_paper.pdf \
+    --venue icml
+</pre>
+      <div class="close-side">
+        <div class="close-cta">
+          <a class="btn btn-primary btn-lg" href="https://github.com/wutaghost/chart-review#快速开始" data-i18n="close.cta1">安装并运行 fixture</a>
+          <a class="btn btn-ghost btn-lg" href="https://github.com/wutaghost/chart-review/tree/main/docs" data-i18n="close.cta2">查看文档</a>
+        </div>
+        <ul class="list-tight">
+          <li data-i18n-html="close.n1_html">输出写入 <code class="mono">outputs/&lt;review_id&gt;.json</code> 与 <code class="mono">.md</code>。</li>
+          <li data-i18n-html="close.n2_html">整篇论文用 <code class="mono">--paper</code> 指向一个 review 目录，得到 paper 级报告与 AC 关注项。</li>
+          <li data-i18n-html="close.n3_html">provider 通过 <code class="mono">CHART_PROVIDER</code> 与 <code class="mono">CHART_MODEL</code> 配置。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="shell">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><b>CHART</b><span data-i18n="brand.sub">calibrated review trace</span></a>
+        <p data-i18n="foot.tagline">面向同行评审的结构化记录与校准层。不替代 reviewer，不替代 AC，不决定论文是否接收。</p>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.start">开始</h4>
+        <ul>
+          <li><a href="https://github.com/wutaghost/chart-review#快速开始" data-i18n="foot.start.1">快速开始</a></li>
+          <li><a href="https://github.com/wutaghost/chart-review/blob/main/docs/configuration.md" data-i18n="foot.start.2">模型配置</a></li>
+          <li><a href="https://github.com/wutaghost/chart-review/blob/main/docs/runtime.md" data-i18n="foot.start.3">运行选项</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.method">方法</h4>
+        <ul>
+          <li><a href="https://github.com/wutaghost/chart-review/blob/main/docs/anchor-scoring.md">Anchor scoring</a></li>
+          <li><a href="https://github.com/wutaghost/chart-review/blob/main/docs/ac-attention.md">AC attention</a></li>
+          <li><a href="https://github.com/wutaghost/chart-review/blob/main/docs/report-schema.md">Report schema</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.check">核对</h4>
+        <ul>
+          <li><a href="https://github.com/wutaghost/chart-review/blob/main/docs/evaluation.md" data-i18n="foot.check.1">评估与标注</a></li>
+          <li><a href="https://github.com/wutaghost/chart-review/blob/main/docs/validation-runbook.md">Validation runbook</a></li>
+          <li><a href="https://github.com/wutaghost/chart-review" data-i18n="foot.check.3">源码仓库</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span data-i18n="foot.base1">研究原型 · License TBD</span>
+      <span data-i18n="foot.base2">页面数据来自 review_156R 与 llmscoring1 的真实运行输出</span>
+    </div>
+  </div>
+</footer>
+<script src="i18n.js?v=4"></script>
+<script src="demo.js?v=8"></script>
+</body>
+</html>

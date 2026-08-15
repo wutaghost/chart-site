@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="730" viewBox="0 0 1800 730">
+  <defs>
+    <linearGradient id="nodeGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f4f4f4"/>
+    </linearGradient>
+    <marker id="blackArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+    </marker>
+    <filter id="nodeShadow" x="-8%" y="-8%" width="116%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="900.0" y="45" text-anchor="middle" font-size="25" font-weight="700" fill="#111111" font-family="Arial, sans-serif">Review Diagnosis Workflow</text>
+  <rect x="20" y="75" width="1760" height="625" rx="12" fill="#ffffff" stroke="#171717" stroke-width="2"/>
+<g filter="url(#nodeShadow)"><rect x="45" y="300" width="185" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="137.5" y="356.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="137.5" dy="0">1. ReviewCase</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="285" y="285" width="225" height="130" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="397.5" y="344.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="397.5" dy="0">2. ReviewDiagnosis</tspan><tspan x="397.5" dy="25">Graph</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="565" y="285" width="205" height="130" rx="8" fill="#eaf2ff" stroke="#2459a9" stroke-width="2"/></g>
+<text x="667.5" y="344.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="667.5" dy="0">3. score_anchor</tspan><tspan x="667.5" dy="25">mandatory</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="825" y="300" width="165" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="907.5" y="356.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="907.5" dy="0">4. planner</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1050" y="110" width="220" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1160.0" y="154.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1160.0" dy="0">5. evidence_</tspan><tspan x="1160.0" dy="25">grounding</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1050" y="285" width="220" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1160.0" y="341.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1160.0" dy="0">6. rubric_weight</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1050" y="465" width="220" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1160.0" y="509.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1160.0" dy="0">7. submit_</tspan><tspan x="1160.0" dy="25">diagnosis</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1330" y="455" width="210" height="120" rx="8" fill="#eaf2ff" stroke="#2459a9" stroke-width="2"/></g>
+<text x="1435.0" y="509.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1435.0" dy="0">8. reliability_</tspan><tspan x="1435.0" dy="25">gate</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1330" y="230" width="180" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1420.0" y="286.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1420.0" dy="0">9. feedback</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1580" y="300" width="175" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1667.5" y="356.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1667.5" dy="0">10. CaseReport</tspan></text>
+<path d="M230,350 L285,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M510,350 L565,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="537.5" y="341.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">always</text>
+<path d="M770,350 L825,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M990,330 L1050,160" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M990,350 L1050,335" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M990,375 L1050,515" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M1270,160 L1330,255" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1300.0" y="198.5" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">result</text>
+<path d="M1270,335 L1330,285" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1300.0" y="301.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">result</text>
+<path d="M1270,515 L1330,515" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M1540,515 L1580,390" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1560.0" y="443.5" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">accepted</text>
+<path d="M1330,500 C1285,420 1310,365 1420,330" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)" stroke-dasharray="8 7"/>
+<text x="1375.0" y="406.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">rejected</text>
+<path d="M1330,260 L1330,88 L905,88 L905,300" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)" stroke-dasharray="8 7"/>
+<path d="M1510,280 L1580,325" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)" stroke-dasharray="8 7"/>
+<text x="1545.0" y="293.5" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">terminal</text>
+<text x="620" y="655" font-size="15" font-weight="600" fill="#2459a9" font-family="Arial, sans-serif">Blue nodes are mandatory deterministic gates.</text>
+</svg>

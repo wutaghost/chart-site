@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="730" viewBox="0 0 2100 730">
+  <defs>
+    <linearGradient id="nodeGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f4f4f4"/>
+    </linearGradient>
+    <marker id="blackArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+    </marker>
+    <filter id="nodeShadow" x="-8%" y="-8%" width="116%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="1050.0" y="45" text-anchor="middle" font-size="25" font-weight="700" fill="#111111" font-family="Arial, sans-serif">Paper-Level AC Candidate Selection</text>
+  <rect x="20" y="75" width="2060" height="625" rx="12" fill="#ffffff" stroke="#171717" stroke-width="2"/>
+<g filter="url(#nodeShadow)"><rect x="45" y="300" width="170" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="130.0" y="356.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="130.0" dy="0">1. Reviews</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="265" y="280" width="220" height="140" rx="8" fill="#eaf2ff" stroke="#2459a9" stroke-width="2"/></g>
+<text x="375.0" y="332.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="375.0" dy="0">2. Parallel</tspan><tspan x="375.0" dy="25">Diagnosis</tspan><tspan x="375.0" dy="25">all reviews</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="535" y="300" width="205" height="100" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="637.5" y="344.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="637.5" dy="0">3. Ordered</tspan><tspan x="637.5" dy="25">CaseReports</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="800" y="145" width="230" height="110" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="915.0" y="194.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="915.0" dy="0">4. Single-review</tspan><tspan x="915.0" dy="25">Candidates</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="800" y="440" width="230" height="110" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="915.0" y="489.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="915.0" dy="0">5. Cross-review</tspan><tspan x="915.0" dy="25">Analysis</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1090" y="280" width="235" height="140" rx="8" fill="#eaf2ff" stroke="#2459a9" stroke-width="2"/></g>
+<text x="1207.5" y="332.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1207.5" dy="0">6. Validated</tspan><tspan x="1207.5" dy="25">Candidate Pool</tspan><tspan x="1207.5" dy="25">A001...</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1380" y="295" width="190" height="110" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1475.0" y="344.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1475.0" dy="0">7. Paper</tspan><tspan x="1475.0" dy="25">Planner</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1625" y="295" width="180" height="110" rx="8" fill="#eaf2ff" stroke="#2459a9" stroke-width="2"/></g>
+<text x="1715.0" y="356.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1715.0" dy="0">8. AC gate</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1860" y="295" width="190" height="110" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1955.0" y="356.0" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1955.0" dy="0">9. PaperReport</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1625" y="500" width="180" height="105" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1715.0" y="546.5" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1715.0" dy="0">10. AC</tspan><tspan x="1715.0" dy="25">Validation</tspan></text>
+<g filter="url(#nodeShadow)"><rect x="1860" y="500" width="190" height="105" rx="8" fill="url(#nodeGradient)" stroke="#171717" stroke-width="2"/></g>
+<text x="1955.0" y="558.5" font-size="19" font-weight="500" fill="#111111" text-anchor="middle" font-family="Inter, Arial, sans-serif"><tspan x="1955.0" dy="0">11. Metrics</tspan></text>
+<path d="M215,350 L265,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M485,350 L535,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="510.0" y="341.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">input order</text>
+<path d="M740,330 L800,200" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M740,370 L800,495" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M1030,200 L1090,320" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1060.0" y="251.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">merge</text>
+<path d="M1030,495 L1090,385" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1060.0" y="431.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">merge</text>
+<path d="M1325,350 L1380,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1352.5" y="341.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">candidate IDs</text>
+<path d="M1570,350 L1625,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1597.5" y="341.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">selected</text>
+<path d="M1805,350 L1860,350" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<path d="M1955,405 L1715,500" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1835.0" y="443.5" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">worksheet</text>
+<path d="M1805,552 L1860,552" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)"/>
+<text x="1832.5" y="543.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">labels</text>
+<path d="M1625,385 C1585,470 1505,470 1475,405" fill="none" stroke="#111111" stroke-width="2.3" marker-end="url(#blackArrow)" stroke-dasharray="8 7"/>
+<text x="1550.0" y="386.0" font-size="13" fill="#333333" text-anchor="middle" font-family="Arial, sans-serif">invalid selection</text>
+<text x="70" y="650" font-size="15" fill="#333333" font-family="Arial, sans-serif">Failed reviews are isolated; only complete diagnoses enter candidate generation.</text>
+</svg>
