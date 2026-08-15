@@ -246,8 +246,15 @@ section { border-bottom: 1px solid var(--line); }
 .quote span { display: block; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-faint); margin-bottom: 8px; }
 
 .list-tight { margin: 20px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
-.list-tight li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; font-size: 14.5px; font-weight: 450; color: var(--text-dim); }
-.list-tight li::before { content: "\2192"; color: var(--text-faint); font-family: var(--mono); }
+/* Hanging indent rather than a two-column grid: these items mix bare text with
+   inline <code> and <b>, and each child would become its own grid item and get
+   squeezed into the marker column. A positioned marker leaves the children to
+   flow and wrap as normal inline content. */
+.list-tight li { position: relative; padding-left: 28px; font-size: 14.5px; font-weight: 450; color: var(--text-dim); }
+.list-tight li::before {
+  content: "\2192"; position: absolute; left: 0; top: 0;
+  color: var(--text-faint); font-family: var(--mono);
+}
 .list-tight li b { color: var(--text); font-weight: 550; }
 
 .flag {
