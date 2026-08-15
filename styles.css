@@ -329,8 +329,9 @@ section { border-bottom: 1px solid var(--line); }
 /* Inline SVG rather than <img> for two reasons: the nodes can then use the
    page's own tokens and Geist Mono instead of a system fallback, and the
    annotations stay in the DOM where data-i18n can reach them. */
-.arch { margin-top: 44px; }
-.arch + .arch { margin-top: 64px; }
+/* One panel at a time, so no stacking margin between them; .demo-head above
+   already carries the gap. */
+.arch[hidden] { display: none; }
 .arch-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .arch-head h3 { font-size: 19px; }
 .arch-head .arch-tag {

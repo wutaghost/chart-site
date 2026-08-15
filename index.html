@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
 <a class="skip" href="#main" data-i18n="skip">跳到主要内容</a>
@@ -382,12 +382,18 @@
 </section>
 <section class="pad" id="arch">
   <div class="shell">
-    <div class="reveal">
-      <h2 class="h2" data-i18n="arch.h2">两张图，两个层级。</h2>
-      <p class="lede" data-i18n="arch.lede">单条 review 走诊断图，同一篇论文的多条 review 走 paper 图。下面两张按 README 的架构概览绘制，节点名与代码里的节点名一致。</p>
+    <div class="demo-head reveal">
+      <div>
+        <h2 class="h2" data-i18n="arch.h2">两张图，两个层级。</h2>
+        <p class="lede" data-i18n="arch.lede">单条 review 走诊断图，同一篇论文的多条 review 走 paper 图。两张都按 README 的架构概览绘制，节点名与代码里的节点名一致。用右边的切换选择要看哪一张。</p>
+      </div>
+      <div class="seg" role="tablist" data-i18n-attr="aria-label:arch.seg.label" aria-label="切换架构图">
+        <button class="seg-btn" role="tab" id="archTab1" aria-selected="true" aria-controls="archPanel1" data-i18n="arch.seg.1">单条 review</button>
+        <button class="seg-btn" role="tab" id="archTab2" aria-selected="false" aria-controls="archPanel2" data-i18n="arch.seg.2">paper 级</button>
+      </div>
     </div>
 
-    <div class="arch reveal">
+    <div class="arch reveal" id="archPanel1" role="tabpanel" aria-labelledby="archTab1">
       <div class="arch-head">
         <h3 data-i18n="arch.1.h3">单条 review 的诊断图</h3>
         <span class="arch-tag">ReviewDiagnosisGraph</span>
@@ -475,7 +481,7 @@
       </div>
     </div>
 
-    <div class="arch reveal">
+    <div class="arch reveal" id="archPanel2" role="tabpanel" aria-labelledby="archTab2" hidden>
       <div class="arch-head">
         <h3 data-i18n="arch.2.h3">同一篇论文的 paper 图</h3>
         <span class="arch-tag">PaperDiagnosisGraph</span>
@@ -722,7 +728,7 @@ $ python scripts/run_pipeline.py \
     </div>
   </div>
 </footer>
-<script src="i18n.js?v=5"></script>
-<script src="demo.js?v=10"></script>
+<script src="i18n.js?v=6"></script>
+<script src="demo.js?v=11"></script>
 </body>
 </html>

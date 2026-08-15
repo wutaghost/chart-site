@@ -354,6 +354,28 @@
     viewBtns.ac.addEventListener("click", function () { setView("ac"); });
   }
 
+  /* architecture figure switch. The two diagrams are alternatives rather than
+     a sequence, so only one is in the page at a time. */
+  var archTabs = [document.getElementById("archTab1"), document.getElementById("archTab2")];
+  var archPanels = [document.getElementById("archPanel1"), document.getElementById("archPanel2")];
+
+  function setArch(i) {
+    if (!archPanels[0] || !archPanels[1]) return;
+    archPanels.forEach(function (p, n) {
+      p.hidden = n !== i;
+      archTabs[n].setAttribute("aria-selected", n === i ? "true" : "false");
+      /* Same reason as the view switch: the scroll observer cannot reveal a
+         panel that was hidden when it ran. */
+      if (n === i) p.classList.add("in");
+    });
+  }
+
+  if (archTabs[0] && archTabs[1]) {
+    archTabs.forEach(function (tab, i) {
+      tab.addEventListener("click", function () { setArch(i); });
+    });
+  }
+
   /* zh / en switch. Static copy is tagged with data-i18n in the markup;
      anything rendered by this file is rebuilt from the dictionary. */
   function applyLocale() {
