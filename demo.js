@@ -152,6 +152,14 @@
      evidence: the indices intentionally go 1 -> 3 -> 2 -> 4. */
   var LOG_STAGE = [0, 1, 1, 3, 3, 2, 2, 4, 4, 4];
 
+  /* How long each row stays on screen before the next one lands, in ms.
+     Not uniform: a row that only announces a step ("planner: requested ...")
+     needs less time than one that swaps a full panel of numbers in. The rows
+     that replace the panel body get the long dwells so there is time to read
+     the result before the next step takes over. Sum is ~9s. */
+  var DWELL = [1000, 700, 1150, 650, 1050, 650, 1100, 1050, 900, 900];
+  var LEAD_IN = 380;
+
   var body = document.getElementById("stageBody");
   if (!body) return;
 
@@ -249,7 +257,16 @@
     paintRunNote();
 
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var tick = reduce ? 60 : 420;
+
+    /* Cumulative offsets, so a row fires after every dwell before it. Reduced
+       motion collapses to a flat 60ms: the point there is to reach the end
+       state quickly, not to pace a reading experience. */
+    var at = LEAD_IN;
+    var offsets = LOG.map(function (row, n) {
+      var start = at;
+      at += reduce ? 60 : DWELL[n];
+      return reduce ? 60 * (n + 1) : start;
+    });
 
     LOG.forEach(function (row, n) {
       timers.push(setTimeout(function () {
@@ -276,7 +293,7 @@
           paintRunNote();
           paint(STAGES.length - 1);
         }
-      }, tick * (n + 1)));
+      }, offsets[n]));
     });
   }
 
