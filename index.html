@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=14">
+<link rel="stylesheet" href="styles.css?v=15">
 </head>
 <body>
 <a class="skip" href="#main" data-i18n="skip">跳到主要内容</a>
@@ -22,6 +22,7 @@
     <nav class="nav-links" data-i18n-attr="aria-label:aria.nav" aria-label="主导航">
       <a href="#demo" data-i18n="nav.demo">诊断流程</a>
       <a href="#checks" data-i18n="nav.checks">检查项</a>
+      <a href="#arch" data-i18n="nav.arch">架构</a>
       <a href="#venues" data-i18n="nav.venues">支持的 venue</a>
     </nav>
     <div class="nav-right">
@@ -38,6 +39,7 @@
 <div class="mobile-panel" id="mobilePanel">
   <a href="#demo" data-i18n="nav.demo">诊断流程</a>
   <a href="#checks" data-i18n="nav.checks">检查项</a>
+  <a href="#arch" data-i18n="nav.arch">架构</a>
   <a href="#venues" data-i18n="nav.venues">支持的 venue</a>
   <a href="https://github.com/wutaghost/chart-review">GitHub</a>
 </div>
@@ -156,12 +158,9 @@
       </div>
 
       <div class="ac-body">
-        <div class="figframe figframe-wide">
-          <!-- Not lazy: it sits inside a panel that starts hidden, and a
-               lazy image in a hidden subtree never enters the viewport. -->
-          <img src="assets/paper-ac-selection-workflow.svg" data-i18n-attr="alt:ac.figalt" alt="Paper-level AC candidate selection：多条 review 并行诊断后合并为候选池，经 paper planner 与 AC gate 选出条目，输出 PaperReport 与 AC validation 工作表" width="2100" height="730">
-        </div>
-        <p class="stage-note" data-i18n="ac.fignote">四条 review 并行诊断（最多 4 路并发），失败的 review 被隔离，只有完整诊断进入候选生成。单条 review 内部的 specialist 仍是顺序执行。</p>
+        <!-- The 2100px workflow diagram used to sit here at 0.54 scale, which
+             put its labels at 10px. It now lives at true size in #arch. -->
+        <p class="stage-note" data-i18n-html="ac.fignote_html">四条 review 并行诊断（最多 4 路并发），失败的 review 被隔离，只有完整诊断进入候选生成。单条 review 内部的 specialist 仍是顺序执行。完整的 paper 级流程见 <a href="#arch">架构图</a>。</p>
 
         <dl class="kv">
           <div><dt data-i18n="ac.k.span">score span</dt><dd class="accent">3.0</dd></div>
@@ -302,14 +301,37 @@
       </div>
 
       <div class="cell cell-fig">
+        <!-- The full workflow diagram used to sit here, but this cell is only
+             ~515px wide, which scaled its labels down to 5px. It now lives at
+             true size in #arch; this cell keeps the gate outcome only. -->
         <div class="figframe">
-          <!-- 7 KB SVG; eager avoids a lazy image that never resolves when
-               it is inside a collapsed or hidden container. -->
-          <img src="assets/review-diagnosis-workflow.svg" data-i18n-attr="alt:checks.4.alt" alt="Review diagnosis workflow：从加载 review 到 anchor 计算、证据核查、rubric 检查，最后经 reliability gate 输出报告">
+          <svg class="gatefig" viewBox="0 0 460 200" width="460" height="200" role="img" data-i18n-attr="aria-label:checks.4.alt" alt="" aria-label="reliability gate 的两个出口：通过则写出 complete 报告，不通过则回到 planner 重新诊断，始终不通过则标记 degraded">
+            <defs>
+              <marker id="a3-arrow" markerWidth="7" markerHeight="7" refX="5.6" refY="2.6" orient="auto">
+                <path d="M0,0 L0,5.2 L6.2,2.6 z" fill="#cdbba3"/>
+              </marker>
+            </defs>
+            <rect class="n-box-key" x="140" y="16" width="180" height="52" rx="6"/>
+            <text class="n-label" x="230" y="40" text-anchor="middle">reliability_gate</text>
+            <text class="n-sub n-sub-key" x="230" y="57" text-anchor="middle">check_detailed()</text>
+
+            <path class="e-line" d="M190,68 L190,96 L96,96 L96,124" marker-end="url(#a3-arrow)"/>
+            <text class="e-label" x="90" y="90" text-anchor="end" data-i18n="checks.4.pass">passed</text>
+            <path class="e-line e-loop" d="M270,68 L270,96 L364,96 L364,124" marker-end="url(#a3-arrow)"/>
+            <text class="e-label" x="370" y="90" data-i18n="checks.4.fail">rejected</text>
+
+            <rect class="n-box" x="16" y="128" width="160" height="52" rx="6"/>
+            <text class="n-label" x="96" y="152" text-anchor="middle">CaseReport</text>
+            <text class="n-sub" x="96" y="169" text-anchor="middle">complete</text>
+
+            <rect class="n-box" x="284" y="128" width="160" height="52" rx="6"/>
+            <text class="n-label" x="364" y="152" text-anchor="middle">feedback</text>
+            <text class="n-sub" x="364" y="169" text-anchor="middle" data-i18n="checks.4.redo">回到 planner</text>
+          </svg>
         </div>
         <div class="figcap">
-          <h3 data-i18n="checks.4.h3">四类检查串在一条流水线上</h3>
-          <p data-i18n="checks.4.p">anchor、证据、rubric 三个 specialist 由 planner 依次调度，结果汇总后经 reliability gate 才写出报告。门控不通过时记录降级为 degraded，而不是悄悄输出一份看起来完整的结论。</p>
+          <h3 data-i18n="checks.4.h3">门控只有两个出口</h3>
+          <p data-i18n-html="checks.4.p_html">三个 specialist 由 planner 调度完毕后，结论要先过 reliability gate。不通过时失败原因会写回上下文让模型重新诊断；若始终不通过，记录标记为 degraded，而不是悄悄输出一份看起来完整的结论。完整流程见 <a href="#arch">架构图</a>。</p>
         </div>
       </div>
     </div>
@@ -353,6 +375,234 @@
         <div>
           <p data-i18n="soap.p.p">生成 reviewer 或 AC 可以继续处理的 follow-up：补证据、解释权重、调整分数，或只留档。</p>
           <div class="fields"><span>care_plan</span><span>choice</span><span>revised_score</span><span>added_justification</span><span>residual_before</span><span>residual_after</span><span>resolved</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="pad" id="arch">
+  <div class="shell">
+    <div class="reveal">
+      <h2 class="h2" data-i18n="arch.h2">两张图，两个层级。</h2>
+      <p class="lede" data-i18n="arch.lede">单条 review 走诊断图，同一篇论文的多条 review 走 paper 图。下面两张按 README 的架构概览绘制，节点名与代码里的节点名一致。</p>
+    </div>
+
+    <div class="arch reveal">
+      <div class="arch-head">
+        <h3 data-i18n="arch.1.h3">单条 review 的诊断图</h3>
+        <span class="arch-tag">ReviewDiagnosisGraph</span>
+      </div>
+      <p class="arch-note" data-i18n="arch.1.note">只有 score_anchor 是必经节点，它同时负责建立 LLM 会话。之后由 planner 在运行时决定调度哪些 specialist、以什么顺序调度——图上的两条 specialist 通道是可选的，不是固定的第三步和第四步。</p>
+
+      <div class="arch-frame">
+        <div class="arch-scroll" tabindex="0" role="group" data-i18n-attr="aria-label:arch.1.scroll" aria-label="单条 review 诊断图，可横向滚动">
+          <svg viewBox="0 0 1160 470" width="1160" height="470" role="img" data-i18n-attr="aria-label:arch.1.alt" aria-label="单条 review 的诊断图：ReviewCase 进入 score_anchor，planner 调度 evidence_grounding 与 rubric_weight，经 submit_diagnosis 与 reliability_gate 后输出 CaseReport；门控不通过时经 feedback 回到 planner">
+            <defs>
+              <marker id="a1-arrow" markerWidth="7" markerHeight="7" refX="5.6" refY="2.6" orient="auto">
+                <path d="M0,0 L0,5.2 L6.2,2.6 z" fill="#cdbba3"/>
+              </marker>
+            </defs>
+
+            <!-- specialist group: optional, planner-ordered -->
+            <text class="g-title" x="392" y="44">planner dispatch · <tspan data-i18n="arch.1.g">运行时选择，顺序不固定</tspan></text>
+            <rect class="g-frame" x="380" y="58" width="352" height="132" rx="8"/>
+            <rect class="n-box" x="396" y="82" width="152" height="52" rx="6"/>
+            <text class="n-label" x="472" y="106" text-anchor="middle">evidence_</text>
+            <text class="n-label" x="472" y="122" text-anchor="middle">grounding</text>
+            <rect class="n-box" x="564" y="82" width="152" height="52" rx="6"/>
+            <text class="n-label" x="640" y="114" text-anchor="middle">rubric_weight</text>
+            <text class="n-sub" x="556" y="164" text-anchor="middle" data-i18n="arch.1.seq">一次一个，串行执行</text>
+
+            <!-- spine -->
+            <rect class="n-box" x="24" y="238" width="140" height="56" rx="6"/>
+            <text class="n-label" x="94" y="264" text-anchor="middle">ReviewCase</text>
+            <text class="n-sub" x="94" y="281" text-anchor="middle" data-i18n="arch.1.n1">review + 论文</text>
+
+            <rect class="n-box-key" x="212" y="238" width="152" height="56" rx="6"/>
+            <text class="n-label" x="288" y="264" text-anchor="middle">score_anchor</text>
+            <text class="n-sub n-sub-key" x="288" y="281" text-anchor="middle" data-i18n="arch.1.n2">必经</text>
+
+            <rect class="n-box" x="412" y="238" width="128" height="56" rx="6"/>
+            <text class="n-label" x="476" y="271" text-anchor="middle">planner</text>
+
+            <rect class="n-box" x="588" y="238" width="152" height="56" rx="6"/>
+            <text class="n-label" x="664" y="264" text-anchor="middle">submit_</text>
+            <text class="n-label" x="664" y="280" text-anchor="middle">diagnosis</text>
+
+            <rect class="n-box-key" x="788" y="238" width="152" height="56" rx="6"/>
+            <text class="n-label" x="864" y="264" text-anchor="middle">reliability_gate</text>
+            <text class="n-sub n-sub-key" x="864" y="281" text-anchor="middle">check_detailed()</text>
+
+            <rect class="n-box" x="988" y="238" width="148" height="56" rx="6"/>
+            <text class="n-label" x="1062" y="264" text-anchor="middle">CaseReport</text>
+            <text class="n-sub" x="1062" y="281" text-anchor="middle">finalize</text>
+
+            <!-- feedback, below the spine -->
+            <rect class="n-box" x="588" y="366" width="152" height="52" rx="6"/>
+            <text class="n-label" x="664" y="397" text-anchor="middle">feedback</text>
+
+            <!-- spine edges -->
+            <path class="e-line" d="M164,266 L206,266" marker-end="url(#a1-arrow)"/>
+            <path class="e-line" d="M364,266 L406,266" marker-end="url(#a1-arrow)"/>
+            <text class="e-label" x="385" y="256" text-anchor="middle">always</text>
+            <path class="e-line" d="M540,266 L582,266" marker-end="url(#a1-arrow)"/>
+            <path class="e-line" d="M740,266 L782,266" marker-end="url(#a1-arrow)"/>
+            <path class="e-line" d="M940,266 L982,266" marker-end="url(#a1-arrow)"/>
+            <text class="e-label" x="961" y="256" text-anchor="middle" data-i18n="arch.1.e.pass">passed</text>
+
+            <!-- planner <-> specialists. Both stop ~5px short of their target
+                 like every other edge here; the return leg ends at 232 rather
+                 than 238 so its head does not sit on the planner's border. -->
+            <path class="e-line" d="M446,238 L446,196" marker-end="url(#a1-arrow)"/>
+            <path class="e-line" d="M506,196 L506,232" marker-end="url(#a1-arrow)"/>
+            <text class="e-label" x="440" y="216" text-anchor="end" data-i18n="arch.1.e.call">call</text>
+            <text class="e-label" x="512" y="216" data-i18n="arch.1.e.result">result</text>
+
+            <!-- gate rejected -> feedback -> planner -->
+            <path class="e-line e-loop" d="M864,294 L864,392 L746,392" marker-end="url(#a1-arrow)"/>
+            <text class="e-label" x="800" y="382" text-anchor="middle" data-i18n="arch.1.e.reject">rejected</text>
+            <path class="e-line e-loop" d="M588,392 L476,392 L476,300" marker-end="url(#a1-arrow)"/>
+            <text class="e-label" x="500" y="352" data-i18n="arch.1.e.redo">重新诊断</text>
+          </svg>
+        </div>
+        <p class="arch-hint" data-i18n="arch.hint">← 横向滚动查看完整流程 →</p>
+
+        <div class="arch-legend">
+          <div><i class="lg-key"></i><span data-i18n="arch.lg.key">必经节点 / 确定性门控</span></div>
+          <div><i class="lg-node"></i><span data-i18n="arch.lg.node">图节点</span></div>
+          <div><i class="lg-loop"></i><span data-i18n="arch.lg.loop">修复回路</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch reveal">
+      <div class="arch-head">
+        <h3 data-i18n="arch.2.h3">同一篇论文的 paper 图</h3>
+        <span class="arch-tag">PaperDiagnosisGraph</span>
+      </div>
+      <p class="arch-note" data-i18n="arch.2.note">每条 review 各跑一遍上面那张诊断图，最多 4 路并发。CaseReport 按输入顺序重排后合并成候选池，由 paper planner 选出 AC attention items，再经 ac_gate 校验选择是否合法。下面的编号与本页展示的那次真实运行一致：4 条 review，0 条失败。</p>
+
+      <div class="arch-frame">
+        <div class="arch-scroll" tabindex="0" role="group" data-i18n-attr="aria-label:arch.2.scroll" aria-label="paper 级 AC 候选筛选图，可横向滚动">
+          <svg viewBox="0 0 1160 620" width="1160" height="620" role="img" data-i18n-attr="aria-label:arch.2.alt" aria-label="paper 级流程：4 条 review 并行诊断后得到 CaseReport，按输入顺序合并进候选生成，经 paper planner 与 ac_gate 输出 PaperReport，AC 在导出的 JSON 中回填验证字段">
+            <defs>
+              <marker id="a2-arrow" markerWidth="7" markerHeight="7" refX="5.6" refY="2.6" orient="auto">
+                <path d="M0,0 L0,5.2 L6.2,2.6 z" fill="#cdbba3"/>
+              </marker>
+            </defs>
+
+            <!-- band 1: the four reviews of one paper -->
+            <text class="n-sub" x="24" y="26">reviews · <tspan data-i18n="arch.2.b1">同一篇论文</tspan></text>
+            <rect class="n-box" x="24" y="38" width="254" height="48" rx="6"/>
+            <text class="n-label" x="151" y="60" text-anchor="middle">review_v6RF</text>
+            <text class="n-sub" x="151" y="76" text-anchor="middle">Rating 2 / 6</text>
+            <rect class="n-box" x="300" y="38" width="254" height="48" rx="6"/>
+            <text class="n-label" x="427" y="60" text-anchor="middle">review_156R</text>
+            <text class="n-sub" x="427" y="76" text-anchor="middle">Rating 3 / 6</text>
+            <rect class="n-box" x="576" y="38" width="254" height="48" rx="6"/>
+            <text class="n-label" x="703" y="60" text-anchor="middle">review_Fff5</text>
+            <text class="n-sub" x="703" y="76" text-anchor="middle">Rating 4 / 6</text>
+            <rect class="n-box" x="852" y="38" width="254" height="48" rx="6"/>
+            <text class="n-label" x="979" y="60" text-anchor="middle">review_gr3d</text>
+            <text class="n-sub" x="979" y="76" text-anchor="middle">Rating 5 / 6</text>
+
+            <path class="e-line" d="M151,86 L151,128" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M427,86 L427,128" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M703,86 L703,128" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M979,86 L979,128" marker-end="url(#a2-arrow)"/>
+
+            <!-- band 2: parallel diagnosis lanes -->
+            <text class="g-title" x="24" y="120" data-i18n="arch.2.b2">并行诊断 · 最多 4 路并发</text>
+            <rect class="n-lane" x="24" y="132" width="254" height="46" rx="6"/>
+            <text class="n-label" x="151" y="160" text-anchor="middle">ReviewDiagnosisGraph</text>
+            <rect class="n-lane" x="300" y="132" width="254" height="46" rx="6"/>
+            <text class="n-label" x="427" y="160" text-anchor="middle">ReviewDiagnosisGraph</text>
+            <rect class="n-lane" x="576" y="132" width="254" height="46" rx="6"/>
+            <text class="n-label" x="703" y="160" text-anchor="middle">ReviewDiagnosisGraph</text>
+            <rect class="n-lane" x="852" y="132" width="254" height="46" rx="6"/>
+            <text class="n-label" x="979" y="160" text-anchor="middle">ReviewDiagnosisGraph</text>
+
+            <path class="e-line" d="M151,178 L151,218" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M427,178 L427,218" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M703,178 L703,218" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M979,178 L979,218" marker-end="url(#a2-arrow)"/>
+
+            <!-- band 3: case reports, reindexed to input order -->
+            <rect class="n-box" x="24" y="222" width="254" height="48" rx="6"/>
+            <text class="n-label" x="151" y="244" text-anchor="middle">CaseReport</text>
+            <text class="n-sub" x="151" y="260" text-anchor="middle">complete</text>
+            <rect class="n-box" x="300" y="222" width="254" height="48" rx="6"/>
+            <text class="n-label" x="427" y="244" text-anchor="middle">CaseReport</text>
+            <text class="n-sub" x="427" y="260" text-anchor="middle">complete</text>
+            <rect class="n-box" x="576" y="222" width="254" height="48" rx="6"/>
+            <text class="n-label" x="703" y="244" text-anchor="middle">CaseReport</text>
+            <text class="n-sub" x="703" y="260" text-anchor="middle">complete</text>
+            <rect class="n-box" x="852" y="222" width="254" height="48" rx="6"/>
+            <text class="n-label" x="979" y="244" text-anchor="middle">CaseReport</text>
+            <text class="n-sub" x="979" y="260" text-anchor="middle">complete</text>
+
+            <!-- Into candidate generation. Four straight drops rather than a
+                 horizontal collector: the target is a full-width box, so a
+                 collector line would add a crossing for no information. -->
+            <path class="e-line" d="M151,270 L151,330" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M427,270 L427,330" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M703,270 L703,330" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M979,270 L979,330" marker-end="url(#a2-arrow)"/>
+            <text class="e-label" x="565" y="304" text-anchor="middle" data-i18n="arch.2.e.order">按输入顺序重排</text>
+
+            <!-- band 4: candidate generation, three inline sub-steps -->
+            <rect class="n-box" x="24" y="336" width="1082" height="66" rx="6"/>
+            <text class="n-label" x="150" y="360" text-anchor="middle">single_review_candidates</text>
+            <text class="n-sub" x="150" y="377" text-anchor="middle" data-i18n="arch.2.c1">单条内候选</text>
+            <path class="e-line" d="M300,366 L344,366" marker-end="url(#a2-arrow)"/>
+            <text class="n-label" x="470" y="360" text-anchor="middle">cross_review_analysis</text>
+            <text class="n-sub" x="470" y="377" text-anchor="middle" data-i18n="arch.2.c2">跨 review 比对</text>
+            <path class="e-line" d="M604,366 L648,366" marker-end="url(#a2-arrow)"/>
+            <text class="n-label" x="800" y="360" text-anchor="middle" data-i18n="arch.2.c3">validated pool</text>
+            <text class="n-sub" x="800" y="377" text-anchor="middle">A001 · A003 …</text>
+
+            <!-- Leaves from the pool, the last sub-step, and elbows left into
+                 the first node of the next row. -->
+            <path class="e-line" d="M800,402 L800,420 L136,420 L136,432" marker-end="url(#a2-arrow)"/>
+
+            <!-- band 5: planner -> gate -> report -> human validation.
+                 Boxes are 224 rather than 236 so the 62px gaps can hold an
+                 edge label without it running over a box border. -->
+            <rect class="n-box" x="24" y="438" width="224" height="60" rx="6"/>
+            <text class="n-label" x="136" y="464" text-anchor="middle">paper_planner</text>
+            <text class="n-sub" x="136" y="481" text-anchor="middle" data-i18n="arch.2.n1">选 attention items</text>
+
+            <rect class="n-box-key" x="310" y="438" width="224" height="60" rx="6"/>
+            <text class="n-label" x="422" y="464" text-anchor="middle">ac_gate</text>
+            <text class="n-sub n-sub-key" x="422" y="481" text-anchor="middle" data-i18n="arch.2.n2">校验选择合法性</text>
+
+            <rect class="n-box" x="596" y="438" width="224" height="60" rx="6"/>
+            <text class="n-label" x="708" y="464" text-anchor="middle">PaperReport</text>
+            <text class="n-sub" x="708" y="481" text-anchor="middle">needs_ac_attention</text>
+
+            <rect class="n-box-human" x="882" y="438" width="224" height="60" rx="6"/>
+            <text class="n-label" x="994" y="464" text-anchor="middle" data-i18n="arch.2.n3">AC 人工验证</text>
+            <text class="n-sub" x="994" y="481" text-anchor="middle">exists · useful · comment</text>
+
+            <path class="e-line" d="M248,468 L304,468" marker-end="url(#a2-arrow)"/>
+            <path class="e-line" d="M534,468 L590,468" marker-end="url(#a2-arrow)"/>
+            <text class="e-label" x="562" y="458" text-anchor="middle" data-i18n="arch.2.e.sel">selected</text>
+            <path class="e-line e-loop" d="M820,468 L876,468" marker-end="url(#a2-arrow)"/>
+
+            <!-- gate rejects an invalid selection back to the planner -->
+            <path class="e-line e-loop" d="M422,498 L422,540 L136,540 L136,504" marker-end="url(#a2-arrow)"/>
+            <text class="e-label" x="279" y="556" text-anchor="middle" data-i18n="arch.2.e.invalid">选择不合法则重选</text>
+
+            <text class="a-note" x="24" y="596" data-i18n="arch.2.foot">失败的 review 被隔离，只有 complete 的诊断进入候选生成；这次运行 4 条全部 complete。</text>
+          </svg>
+        </div>
+        <p class="arch-hint" data-i18n="arch.hint">← 横向滚动查看完整流程 →</p>
+
+        <div class="arch-legend">
+          <div><i class="lg-key"></i><span data-i18n="arch.lg.key">必经节点 / 确定性门控</span></div>
+          <div><i class="lg-node"></i><span data-i18n="arch.lg.node">图节点</span></div>
+          <div><i class="lg-human"></i><span data-i18n="arch.lg.human">人工步骤，不由 agent 填写</span></div>
+          <div><i class="lg-loop"></i><span data-i18n="arch.lg.loop">修复回路</span></div>
         </div>
       </div>
     </div>
@@ -472,7 +722,7 @@ $ python scripts/run_pipeline.py \
     </div>
   </div>
 </footer>
-<script src="i18n.js?v=4"></script>
-<script src="demo.js?v=9"></script>
+<script src="i18n.js?v=5"></script>
+<script src="demo.js?v=10"></script>
 </body>
 </html>

@@ -9,16 +9,19 @@ does not decide whether a paper is accepted.
 
 ## What is in here
 
-Four hand-written files and two SVG diagrams. No build step, no dependencies,
-no framework.
+Four hand-written files. No build step, no dependencies, no framework.
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Page markup, tagged for localisation |
+| `index.html` | Page markup, tagged for localisation; the three diagrams are inline SVG |
 | `styles.css` | Single light theme, one accent, two corner radii |
 | `demo.js` | Step viewer, simulated run, view and locale switching |
-| `i18n.js` | zh-CN and en copy, 177 keys per locale |
-| `assets/*.svg` | Pipeline diagrams |
+| `i18n.js` | zh-CN and en copy, 216 keys per locale |
+
+The architecture diagrams are inline rather than `<img>` so they can use the
+page's own tokens and Geist Mono, and so their annotations sit in the DOM where
+the locale switch can reach them. They are drawn at their true label size and
+scroll sideways on narrow screens instead of scaling down.
 
 Open `index.html` directly, or serve the directory:
 
