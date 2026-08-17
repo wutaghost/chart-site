@@ -195,7 +195,11 @@ section { border-bottom: 1px solid var(--line); }
   border: 1px solid var(--line); border-radius: var(--r-md);
   background: var(--surface); overflow: hidden;
 }
-.panel-grid { display: grid; grid-template-columns: 268px 1fr; min-height: 560px; }
+/* minmax(0, 1fr) rather than 1fr: a bare 1fr floors at the track's min-content,
+   which the mono stage body pushes past the viewport on narrow screens, and the
+   ancestor's overflow-x: hidden then clips it silently. */
+.panel-grid { display: grid; grid-template-columns: 268px minmax(0, 1fr); min-height: 560px; }
+.panel-grid > * { min-width: 0; }
 
 .rail { border-right: 1px solid var(--line); background: var(--surface-2); padding: 20px 0; }
 .rail-title {
@@ -218,8 +222,10 @@ section { border-bottom: 1px solid var(--line); }
 }
 .step[aria-current="true"] .step-num { border-color: var(--accent-line); color: var(--accent-deep); }
 .step.done .step-num { border-color: rgba(116, 176, 131, 0.45); color: var(--ok); }
-.step-name { font-size: 14.5px; font-weight: 500; }
-.step-meta { font-family: var(--mono); font-size: 11.5px; font-weight: 500; color: var(--text-faint); margin-top: 2px; }
+/* Both must be block: as inline spans the mono meta flows onto the name's
+   last line whenever the name is short enough to leave room. */
+.step-name { display: block; font-size: 14.5px; font-weight: 500; }
+.step-meta { display: block; font-family: var(--mono); font-size: 11.5px; font-weight: 500; color: var(--text-faint); margin-top: 2px; }
 /* The selected step lays an amber wash over the rail, which darkens the
    background enough that the faint grey drops under AA at this size. */
 .step[aria-current="true"] .step-meta { color: var(--text-dim); }
@@ -480,6 +486,11 @@ svg .a-note { font-family: var(--sans); font-size: 12.5px; font-weight: 450; fil
 }
 .rtable tbody th { font-family: var(--mono); font-weight: 500; color: var(--text); }
 .rtable tbody td { color: var(--text-dim); font-family: var(--mono); font-weight: 450; }
+/* The colour utilities are scoped to `.kv dd`, so the emphasised cells in this
+   table matched no rule and rendered as plain dim text. Scoped copies here. */
+.rtable td.accent { color: var(--accent); }
+.rtable td.faint { color: var(--text-faint); }
+.rtable td.hot { color: var(--accent); font-weight: 600; }
 .rtable tbody tr.mark { background: var(--accent-soft); }
 .rtable tbody tr:last-child th, .rtable tbody tr:last-child td { border-bottom: 0; }
 
@@ -515,6 +526,150 @@ svg .a-note { font-family: var(--sans); font-size: 12.5px; font-weight: 450; fil
 }
 .ac-val-row em::before { content: "\2610\00a0\00a0"; }
 .ac-val-row u { flex: 1 1 180px; min-width: 120px; height: 1px; background: var(--line-strong); text-decoration: none; }
+
+/* Cross-review item: the classifier fields that say why three reviews were
+   put on one axis at all. Rendered as a compact label/value stack. */
+.ac-axis { margin-top: 18px; display: grid; gap: 8px; }
+.ac-axis > div { display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.ac-axis i {
+  font-style: normal; font-family: var(--mono); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); min-width: 132px;
+}
+.ac-axis span { font-size: 14px; font-weight: 450; color: var(--text-dim); flex: 1 1 260px; }
+
+/* One block per reviewer stance. A cross-review item has at least two, so the
+   review id has to stay scannable down the left edge. */
+.ac-pos { margin-top: 20px; display: grid; gap: 12px; }
+.ac-pos > b {
+  display: block; font-family: var(--mono); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint);
+}
+.ac-pos-item { border-left: 2px solid var(--line-strong); padding: 2px 0 2px 14px; }
+.ac-pos-top { display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.ac-pos-id { font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--ok); }
+.ac-pos-status { font-family: var(--mono); font-size: 11px; color: var(--text-faint); }
+.ac-pos-item p { font-size: 14.5px; font-weight: 450; color: var(--text); margin: 8px 0 0; }
+.ac-pos-basis {
+  display: block; margin: 10px 0 0; font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
+}
+.ac-pos-item ul { margin: 7px 0 0; padding-left: 18px; display: grid; gap: 6px; }
+.ac-pos-item li { font-size: 13px; font-weight: 450; color: var(--text-faint); }
+
+/* ---------- deliverable ----------
+   The artifact a reviewer or AC actually receives, framed like a document in a
+   conference system rather than like another panel of metrics. The bar carries
+   the origin path so it is clear this is output, not more analysis. */
+
+.deliv { margin-top: 26px; border: 1px solid var(--line-strong); border-radius: var(--r-md); background: var(--surface); overflow: hidden; }
+.deliv-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 11px 18px; background: var(--surface-2); border-bottom: 1px solid var(--line);
+}
+.deliv-path { font-family: var(--mono); font-size: 11.5px; font-weight: 500; color: var(--text-faint); }
+.deliv-body { padding: 24px 26px 26px; }
+.deliv-h {
+  font-size: 17px; font-weight: 640; margin: 0; padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.deliv-sec { margin-top: 22px; }
+.deliv-sec > b {
+  display: block; font-family: var(--mono); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px;
+}
+.deliv-sec > p { font-size: 14.5px; font-weight: 450; color: var(--text-dim); margin: 0; max-width: 68ch; }
+.deliv-score { display: grid; gap: 8px; margin-bottom: 14px; }
+.deliv-score > div { display: flex; gap: 10px; align-items: baseline; font-family: var(--mono); font-size: 13.5px; }
+.deliv-score i { font-style: normal; color: var(--text-faint); min-width: 210px; }
+.deliv-score b { font-weight: 600; color: var(--text); }
+.deliv-score b.hot { color: var(--accent); }
+.deliv-issue { margin-top: 20px; padding-top: 18px; border-top: 1px dashed var(--line-strong); }
+.deliv-issue:first-of-type { border-top: 0; padding-top: 0; }
+.deliv-issue > b { display: block; font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+.deliv-wrote { background: var(--surface-2); border-left: 2px solid var(--accent-line); padding: 13px 16px; border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+.deliv-wrote span {
+  display: block; font-family: var(--mono); font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 7px;
+}
+.deliv-wrote em { font-style: italic; font-size: 14.5px; color: var(--text); }
+.deliv-why { font-size: 14px; font-weight: 450; color: var(--text-dim); margin: 14px 0 0; }
+.deliv-why b { display: block; font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+.deliv-ask { margin: 14px 0 0; padding-left: 20px; display: grid; gap: 7px; }
+.deliv-ask li { font-size: 14px; font-weight: 450; color: var(--text-dim); }
+.deliv-opts { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+.deliv-opts li { font-size: 14.5px; font-weight: 450; color: var(--text-dim); }
+.deliv-pre {
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.75; color: var(--text-dim);
+  white-space: pre-wrap; margin: 0; overflow-x: auto;
+}
+/* Native marker replaced so the summary reads as a control in this palette. */
+.deliv-more { margin-top: 20px; border-top: 1px dashed var(--line-strong); padding-top: 16px; }
+.deliv-more > summary {
+  font-family: var(--mono); font-size: 12px; font-weight: 550; color: var(--accent);
+  cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px;
+}
+.deliv-more > summary::-webkit-details-marker { display: none; }
+.deliv-more > summary::before { content: "+"; font-size: 14px; line-height: 1; }
+.deliv-more[open] > summary::before { content: "\2212"; }
+.deliv-more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- author view ----------
+   The only real form on this page. Everything stays local: no fetch, no
+   storage. The radio inputs are visually hidden but remain focusable so the
+   control is keyboard and screen-reader operable; the label carries the paint
+   and the focus ring is drawn from :focus-visible on the input. */
+
+.aform { margin-top: 26px; border: 1px solid var(--line-strong); border-radius: var(--r-md); background: var(--surface); padding: 24px 26px 26px; }
+.aform-h { font-size: 16px; font-weight: 620; margin: 0 0 6px; }
+.aform-note { font-size: 14px; font-weight: 450; color: var(--text-dim); margin: 0 0 20px; max-width: 64ch; }
+.rate { border: 0; margin: 0; padding: 18px 0 0; border-top: 1px solid var(--line); }
+.rate:first-of-type { border-top: 0; padding-top: 0; }
+.rate > legend {
+  padding: 0; font-size: 14.5px; font-weight: 550; color: var(--text);
+}
+.rate-hint { display: block; font-family: var(--mono); font-size: 11.5px; font-weight: 450; color: var(--text-faint); margin-top: 5px; }
+.rate-opts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 13px; }
+.rate-opt { position: relative; }
+.rate-opt input {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+  opacity: 0; cursor: pointer;
+}
+.rate-opt span {
+  display: block; font-family: var(--mono); font-size: 12.5px; font-weight: 500;
+  color: var(--text-dim); background: var(--surface-2);
+  border: 1px solid var(--line-strong); border-radius: var(--r-sm);
+  padding: 8px 14px; text-align: center; min-width: 40px;
+}
+.rate-opt input:checked + span {
+  border-color: var(--accent); color: var(--accent-deep); font-weight: 600;
+  background: var(--accent-soft);
+}
+.rate-opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 3px; }
+.rate-opt input:hover:not(:checked) + span { border-color: var(--text-faint); }
+@media (prefers-reduced-motion: no-preference) {
+  .rate-opt span { transition: border-color 0.16s var(--ease), color 0.16s var(--ease), background 0.16s var(--ease); }
+}
+
+.acheck { display: flex; align-items: flex-start; gap: 11px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+.acheck input { width: 17px; height: 17px; margin: 1px 0 0; accent-color: var(--accent); flex: none; cursor: pointer; }
+.acheck label { font-size: 14.5px; font-weight: 450; color: var(--text); cursor: pointer; }
+.acheck label span { display: block; font-size: 13px; color: var(--text-faint); margin-top: 4px; }
+
+.afield { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+.afield label { display: block; font-size: 14.5px; font-weight: 550; color: var(--text); margin-bottom: 10px; }
+.afield textarea {
+  width: 100%; min-height: 88px; resize: vertical;
+  font-family: var(--sans); font-size: 14.5px; font-weight: 450; color: var(--text);
+  background: var(--surface-2); border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm); padding: 12px 14px;
+}
+.afield textarea::placeholder { color: var(--text-faint); }
+.afield textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.aform-bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+/* Reserves the row so the summary appearing does not shift the button. */
+.aform-out { flex: 1 1 260px; min-height: 20px; font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--text-faint); }
+.aform-out.filled { color: var(--accent-deep); }
 
 /* ---------- close + footer ---------- */
 
@@ -566,7 +721,7 @@ footer { border-bottom: 0; padding: 56px 0 40px; }
 
   .hero-grid { grid-template-columns: 1fr; gap: 40px; }
   .hero { padding-top: 52px; padding-bottom: 64px; }
-  .panel-grid { grid-template-columns: 1fr; min-height: 0; }
+  .panel-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; }
   .rail { border-right: 0; border-bottom: 1px solid var(--line); display: flex; overflow-x: auto; padding: 12px; gap: 8px; }
   .rail-title { display: none; }
   .step { width: auto; flex: none; border-left: 0; border-bottom: 2px solid transparent; border-radius: var(--r-sm); padding: 10px 14px; grid-template-columns: 22px 1fr; }
@@ -596,11 +751,18 @@ footer { border-bottom: 0; padding: 56px 0 40px; }
   .ac-head, .ac-body { padding-left: 18px; padding-right: 18px; }
   .ac-item { padding: 18px 16px; }
   .ac-val-row i { min-width: 100%; }
-  /* The reviewer/AC toggle sits on its own row and can go full width, but the
-     language switch shares the nav bar with the CTA and menu button, so it has
-     to stay intrinsically sized or it pushes them off screen. */
-  .seg:not(.seg-lang) { width: 100%; }
-  .seg:not(.seg-lang) .seg-btn { flex: 1 1 0; }
+  /* The reviewer/AC/author toggle sits on its own row and can go full width, but
+     the language switch shares the nav bar with the CTA and menu button, so it
+     has to stay intrinsically sized or it pushes them off screen. */
+  .seg:not(.seg-lang) { width: 100%; flex-wrap: wrap; }
+  /* Three tabs no longer fit on one 375px row. `1 1 auto` with a floor lets the
+     third wrap to its own line instead of crushing all three labels. */
+  .seg:not(.seg-lang) .seg-btn { flex: 1 1 auto; min-width: 92px; }
+  .deliv-body { padding-left: 18px; padding-right: 18px; }
+  .deliv-bar { padding-left: 14px; padding-right: 14px; }
+  .deliv-score i { min-width: 100%; }
+  .aform { padding: 18px 16px; }
+  .ac-axis i { min-width: 100%; }
   /* At this width the nav cannot hold brand + language switch + CTA + menu.
      The CTA is dropped rather than the language switch because the same link
      appears in the hero and in the mobile menu, while the switch appears

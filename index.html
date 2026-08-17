@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body>
 <a class="skip" href="#main" data-i18n="skip">跳到主要内容</a>
@@ -65,17 +65,18 @@
 
 <b>llmscoring1</b>  icml  <span class="c">4 reviews, 0 failed</span>
 <span class="c">submitted</span>      Rating 2 / 3 / 4 / 5   <span class="c">span</span> <i>3.0</i>
-<span class="c">paper</span>          user_pdf  <i>76796 chars</i>
+<span class="c">paper</span>          user_pdf  <i>76797 chars</i>
 
 <b>review_156R</b>  <span class="c">care_plan:</span> reviewer_calibration_challenge
-<span class="c">anchor range</span>   <i>4.0 - 5.0</i>  residual <i>-1.0</i>  severity <i>low</i>
+<span class="c">anchor range</span>   <i>5.27 - 6.00</i>  residual <i>-2.271</i>  severity <i>high</i>
 <span class="c">direction</span>      score_lower_than_rationale_supports
-<span class="c">stability</span>      stable  <span class="c">(3 samples, direction 100%)</span>
-<span class="c">evidence</span>       3 claims unverifiable  <span class="c">(too general to locate)</span>
+<span class="c">stability</span>      moderate  <span class="c">(3 samples, midpoint σ 0.77)</span>
+<span class="c">evidence</span>       4 claims under_supported  <span class="c">(too general to locate)</span>
 <span class="c">rubric</span>         dominant=none, balanced
+<span class="c">gate</span>           rejected once, repaired  <span class="c">(adjust_score refused)</span>
 
 <u>wrote</u> llmscoring1_paper.json  <span class="c">4 CaseReports</span>
-<span class="c">needs_ac_attention</span> <i>true</i>  <span class="c">items</span> A003, A001
+<span class="c">needs_ac_attention</span> <i>true</i>  <span class="c">items</span> A001  <span class="c">(8 candidates)</span>
 </pre>
     </div>
   </div>
@@ -94,12 +95,13 @@
   <div class="shell">
     <div class="demo-head reveal">
       <div>
-        <h2 class="h2" id="demoTitle">一条 review 走完五步，每一步都留下可核对的中间结果。</h2>
-        <p class="lede" id="demoLede">下面是 <code class="mono">review_156R</code> 的真实 provider 运行结果，论文以 PDF 形式提交，抽取正文 76,796 字符。分数、区间和 rubric 判断来自确定性 Python 规则，不是页面上的装饰数字。</p>
+        <h2 class="h2" id="demoTitle">一条 review 走完五步，最后交出 reviewer 真正收到的那封澄清请求。</h2>
+        <p class="lede" id="demoLede">下面是 <code class="mono">review_156R</code> 的真实 provider 运行结果，论文以 PDF 形式提交，抽取正文 76,797 字符。这次运行里 reliability gate 驳回了模型的第一份结论，planner 补调两个 specialist 后才通过 —— 日志里能看到这段回退。</p>
       </div>
       <div class="seg" role="tablist" data-i18n-attr="aria-label:aria.view" aria-label="切换视角">
         <button class="seg-btn" role="tab" id="viewReviewer" aria-selected="true" aria-controls="viewPanels" data-i18n="demo.seg.reviewer">给 reviewer</button>
         <button class="seg-btn" role="tab" id="viewAc" aria-selected="false" aria-controls="viewPanels" data-i18n="demo.seg.ac">给 AC</button>
+        <button class="seg-btn" role="tab" id="viewAuthor" aria-selected="false" aria-controls="viewPanels" data-i18n="demo.seg.author">给投稿人</button>
       </div>
     </div>
 
@@ -149,7 +151,7 @@
     <div class="panel reveal" id="panelAc" hidden>
       <div class="ac-head">
         <div>
-          <div class="ac-eyebrow">paper llmscoring1 · icml · run paper-post-20260629-115601</div>
+          <div class="ac-eyebrow">paper llmscoring1 · icml · run paper-post-20260817</div>
           <h3 class="ac-title" data-i18n="ac.title">4 条 review 放在一起，只列出与决策相关的分歧。</h3>
         </div>
         <div class="ac-gate">
@@ -165,12 +167,11 @@
         <dl class="kv">
           <div><dt data-i18n="ac.k.span">score span</dt><dd class="accent">3.0</dd></div>
           <div><dt data-i18n="ac.k.reviews">reviews</dt><dd data-i18n="ac.v.reviews">4 · 0 failed</dd></div>
-          <div><dt data-i18n="ac.k.items">attention items</dt><dd>2</dd></div>
+          <div><dt data-i18n="ac.candidates">候选 → 选中</dt><dd class="accent">8 → 1</dd></div>
           <div><dt data-i18n="ac.k.model">model requested</dt><dd>true</dd></div>
         </dl>
 
-        <div class="flag"><b>gate</b><span data-i18n="ac.gate">score_span=3 exceeds 25% of scale　·　selected_ac_attention_items=A003, A001。
-        门控条件写在报告里，AC 可以判断这次升级是否合理。</span></div>
+        <div class="flag"><b>gate</b><span data-i18n="ac.gate">三个条件同时写进报告：score_span=3 超过尺度的 25%；选中 A001；review_156R 与 review_gr3d 的 mismatch 达到 medium 以上。模型请求升级还不够，必须有确定性门控支持，AC 可以据此判断这次升级是否合理。</span></div>
 
         <div class="rtable-wrap" tabindex="0" role="group" data-i18n-attr="aria-label:ac.tscroll" aria-label="review 对照表，可横向滚动">
         <table class="rtable">
@@ -179,61 +180,71 @@
             <tr><th scope="col">review</th><th scope="col">score</th><th scope="col">conf</th><th scope="col">anchor</th><th scope="col">residual</th><th scope="col">severity</th><th scope="col">care plan</th></tr>
           </thead>
           <tbody>
-            <tr><th scope="row">review_v6RF</th><td>2</td><td>4</td><td>2.0 - 3.0</td><td>0.0</td><td class="faint">none</td><td>ac_risk_note</td></tr>
-            <tr class="mark"><th scope="row">review_156R</th><td>3</td><td>4</td><td>4.0 - 5.0</td><td class="accent">-1.0</td><td>low</td><td>reviewer_calibration_challenge</td></tr>
-            <tr><th scope="row">review_Fff5</th><td>4</td><td>4</td><td>4.0 - 4.0</td><td>0.0</td><td class="faint">none</td><td>routine_record</td></tr>
-            <tr class="mark"><th scope="row">review_gr3d</th><td>5</td><td>4</td><td>3.0 - 4.0</td><td class="accent">+1.0</td><td>low</td><td>explain_weighting</td></tr>
+            <tr><th scope="row">review_v6RF</th><td>2</td><td>4</td><td>2.68 - 3.62</td><td>-0.683</td><td class="faint">low</td><td>add_evidence</td></tr>
+            <tr class="mark"><th scope="row">review_156R</th><td>3</td><td>4</td><td>5.27 - 6.00</td><td class="hot">-2.271</td><td class="hot">high</td><td>reviewer_calibration_challenge</td></tr>
+            <tr><th scope="row">review_Fff5</th><td>4</td><td>4</td><td>4.69 - 5.89</td><td>-0.686</td><td class="faint">low</td><td>add_evidence</td></tr>
+            <tr class="mark"><th scope="row">review_gr3d</th><td>5</td><td>4</td><td>3.14 - 3.50</td><td class="accent">+1.5</td><td class="accent">medium</td><td>reviewer_calibration_challenge</td></tr>
           </tbody>
         </table>
         </div>
-        <p class="stage-note" data-i18n="ac.tnote">分数从 2 到 5，但跨度本身不是结论。系统只把其中两条升级为需要 AC 核实的条目。</p>
+        <p class="stage-note" data-i18n="ac.tnote">分数从 2 到 5，但跨度本身不是结论。四条 review 都生成了给 reviewer 的澄清请求，进到 AC 的只有一条 —— 8 个候选里选出 1 个。</p>
 
         <div class="ac-items">
           <article class="ac-item">
             <div class="ac-item-top">
-              <span class="mono ac-id">A003</span>
-              <span class="badge badge-hot">high</span>
-              <span class="ac-kind">single_review_concern · under_supported_claim · review_v6RF</span>
-            </div>
-            <h4>Unsupported decisive claim in review review_v6RF</h4>
-            <div class="quote"><span data-i18n="ac.quote.label">review 里的原始判断</span>The entire Empirical Evidence section is useless because the LLM scores on ICLR 2023/2024 data are contaminated by pretraining data.</div>
-            <p>Review review_v6RF uses this claim as a material reason for its assessment, but the review does not provide enough checkable support to establish its scope or decision weight.</p>
-            <div class="ac-q">
-              <b data-i18n="ac.q.label">需要 AC 核实</b>
-              <ol>
-                <li>Which specific LLMs were used and their training data cutoffs.</li>
-                <li>Evidence that ICLR 2023/2024 papers were included in those models’ pretraining corpora.</li>
-                <li>Quantitative indication of score inflation on those years vs. uncontaminated data.</li>
-                <li>Explanation of why contamination fully invalidates the results rather than merely biasing them.</li>
-                <li>If verified, how much of the overall recommendation depends on it?</li>
-              </ol>
-            </div>
-            <p class="ac-impact"><b data-i18n="ac.impact.label">decision impact</b>If the claim is substantiated and materially affects the paper’s main contribution, it may justify the review’s recommendation; if it remains unsupported or narrow in scope, it should not carry decisive weight.</p>
-            <div class="ac-val">
-              <span>ac_validation</span>
-              <div class="ac-val-row"><i data-i18n="ac.val.exists">exists</i><em data-i18n="ac.yes">Yes</em><em data-i18n="ac.no">No</em><em data-i18n="ac.uncertain">Uncertain</em></div>
-              <div class="ac-val-row"><i data-i18n="ac.val.useful">useful for AC decision</i><em data-i18n="ac.yes">Yes</em><em data-i18n="ac.no">No</em><em data-i18n="ac.uncertain">Uncertain</em></div>
-              <div class="ac-val-row"><i data-i18n="ac.val.comment">comment</i><u></u></div>
-            </div>
-          </article>
-
-          <article class="ac-item">
-            <div class="ac-item-top">
               <span class="mono ac-id">A001</span>
-              <span class="badge">medium</span>
-              <span class="ac-kind">single_review_concern · unexplained_rubric_weight · review_gr3d</span>
+              <span class="badge badge-hot">high</span>
+              <span class="ac-kind">cross_review_disagreement · explicit_conflict · 3 reviewers</span>
             </div>
-            <h4>Unexplained rubric weighting in review review_gr3d</h4>
-            <div class="quote"><span data-i18n="ac.quote.label">review 里的原始判断</span>The overall score of 5.0 is markedly higher than all dimension scores (support, significance, argument_clarity, related_work all 3; discussion_potential 4), suggesting discussion_potential received decisive weight without explanation for why it alone drove a high overall.</div>
-            <p>Review review_gr3d appears to let discussion_potential control the recommendation without explaining why that dimension should outweigh the remaining assessment.</p>
+            <h4>Validity of the empirical evidence section</h4>
+            <div class="ac-axis">
+              <div><i data-i18n="ac.axis">comparison axis</i><span>Validity of the empirical evidence section as support for the proposal</span></div>
+              <div><i data-i18n="ac.relation">relation · aspect</i><span class="mono">explicit_conflict · factual_interpretation</span></div>
+            </div>
+            <p>All three reviewers acknowledge the paper uses empirical analyses on ICLR data. Reviewer v6RF asserts the entire empirical evidence section is useless because pretraining-data contamination makes LLM scores on ICLR 2023-2024 data unreliable. Reviewers 156R and Fff5 identify weaknesses (lack of error bars, correlational nature, circularity) but still see the evidence as providing some level of support for the proposal. The disagreement hinges on whether contamination actually invalidates the analyses, and whether the other weaknesses are independently fatal.</p>
+
+            <div class="ac-pos">
+              <b data-i18n="ac.pos.label">三位 reviewer 的立场</b>
+              <div class="ac-pos-item">
+                <div class="ac-pos-top"><span class="ac-pos-id">review_v6RF</span><span class="ac-pos-status">status=addressed</span></div>
+                <p>The empirical evidence section is completely useless due to pretraining-data contamination.</p>
+                <span class="ac-pos-basis" data-i18n="ac.pos.basis">review 中的支撑依据</span>
+                <ul>
+                  <li>Anything to do with their LLM scores on the ICLR 2023 and 2024 data is completely useless due to pretraining-data contamination.</li>
+                  <li>Why are the ICLR 2023 and 2024 data great but ICLR 2025 suddenly much worse? This only makes sense if the pre-training data is already contaminated.</li>
+                </ul>
+              </div>
+              <div class="ac-pos-item">
+                <div class="ac-pos-top"><span class="ac-pos-id">review_156R</span><span class="ac-pos-status">status=addressed</span></div>
+                <p>The empirical evidence has some issues but is not useless; it provides support though needs improvement.</p>
+                <span class="ac-pos-basis" data-i18n="ac.pos.basis">review 中的支撑依据</span>
+                <ul>
+                  <li>The reviewer is not fully convinced that Figure 2a illustrates the claimed problem.</li>
+                  <li>Some empirical figures would be stronger with error bars, reliability estimates, or correlation statistics.</li>
+                  <li>The paper is clearly written and supports its position with empirical analyses.</li>
+                </ul>
+              </div>
+              <div class="ac-pos-item">
+                <div class="ac-pos-top"><span class="ac-pos-id">review_Fff5</span><span class="ac-pos-status">status=addressed</span></div>
+                <p>The empirical evidence is correlational and has circularity concerns, but still provides some support.</p>
+                <span class="ac-pos-basis" data-i18n="ac.pos.basis">review 中的支撑依据</span>
+                <ul>
+                  <li>The analysis is correlational rather than causal.</li>
+                  <li>There may be time-varying confounders.</li>
+                  <li>The simulation may suffer from model circularity because proxy reviewer and anchor scores use related model families.</li>
+                </ul>
+              </div>
+            </div>
+
             <div class="ac-q">
               <b data-i18n="ac.q.label">需要 AC 核实</b>
               <ol>
-                <li>Which rubric dimension is intended to be decisive for the recommendation?</li>
-                <li>Why should that dimension outweigh the other scored dimensions in this case?</li>
+                <li>Is there evidence that the LLM used for anchor scores was pre-trained on ICLR 2023-2024 data (papers or reviews) prior to the analysis?</li>
+                <li>If contamination exists, does it affect distributional comparisons or only absolute scores, and can the analysis be replicated with a model known to have no contamination?</li>
+                <li>What explains the v6RF observation that ICLR 2025 data is ‘much worse’? Could this be a sign of contamination effects?</li>
               </ol>
             </div>
-            <p class="ac-impact"><b data-i18n="ac.impact.label">decision impact</b>If the dominant dimension is explicitly decisive under the venue rubric, the recommendation may be coherent; otherwise the AC may need to rebalance the review against the other dimensions.</p>
+            <p class="ac-impact"><b data-i18n="ac.impact.label">decision impact</b>If the contamination claim is substantiated and cannot be mitigated, the paper’s empirical evidence collapses, making a strong case for rejection. If the claim is unsubstantiated or can be addressed (e.g., by using a different LLM or showing robustness), the paper retains its empirical grounding, and the remaining weaknesses may be handled in revision, potentially leading to accept.</p>
             <div class="ac-val">
               <span>ac_validation</span>
               <div class="ac-val-row"><i data-i18n="ac.val.exists">exists</i><em data-i18n="ac.yes">Yes</em><em data-i18n="ac.no">No</em><em data-i18n="ac.uncertain">Uncertain</em></div>
@@ -245,6 +256,174 @@
 
         <div class="flag flag-ok"><b>note</b><span><span data-i18n="ac.note">ac_validation 三个字段在报告里是空的，由 AC 填写。系统不预填、不代答，也不记录“正确答案”。</span>
         <span data-i18n-html="ac.note2_html">这份 brief 同时写入 <code class="mono">llmscoring1_paper.json</code> 的 ac_note 字段，可直接导出给 AC。</span></span></div>
+
+        <!-- The artifact itself, verbatim from the run's ac_note field. Kept as
+             preformatted text because that is exactly how render_ac_note emits
+             it: an AC opening the report sees these characters. -->
+        <div class="deliv">
+          <div class="deliv-bar">
+            <span class="deliv-path" data-i18n="deliv.ac.path">会议系统 › 领域主席 › llmscoring1 › AC Review Brief</span>
+            <span class="badge badge-hot" data-i18n="deliv.badge">真实部署时投递的内容</span>
+          </div>
+          <div class="deliv-body">
+            <h4 class="deliv-h" data-i18n="deliv.ac.h">AC Review Brief</h4>
+            <div class="deliv-sec">
+              <div class="deliv-score">
+                <div><i>Paper</i><b>llmscoring1 (icml)</b></div>
+                <div><i>Reviewer scores</i><b>156R=3 · Fff5=4 · gr3d=5 · v6RF=2</b></div>
+                <div><i>Items requiring verification</i><b class="hot">1</b></div>
+              </div>
+            </div>
+            <details class="deliv-more">
+              <summary data-i18n="deliv.ac.more">展开 brief 全文（render_ac_note 原样输出）</summary>
+              <pre class="deliv-pre" style="margin-top:16px">1. [A001] Issue: Validity of the empirical evidence section
+   Analysis: All three reviewers acknowledge the paper uses empirical analyses
+   on ICLR data. Reviewer v6RF asserts the entire empirical evidence section is
+   useless because pretraining-data contamination makes LLM scores on ICLR
+   2023-2024 data unreliable. Reviewers 156R and Fff5 identify weaknesses (lack
+   of error bars, correlational nature, circularity) but still see the evidence
+   as providing some level of support for the proposal. The disagreement hinges
+   on whether contamination actually invalidates the analyses, and whether the
+   other weaknesses are independently fatal.
+   Reviewer positions:
+     - review_156R: The empirical evidence has some issues but is not useless;
+       it provides support though needs improvement.
+     - review_Fff5: The empirical evidence is correlational and has circularity
+       concerns, but still provides some support.
+     - review_v6RF: The empirical evidence section is completely useless due to
+       pretraining-data contamination.
+   Verification checklist (answer from paper/review/rebuttal evidence):
+     - Is there evidence that the LLM used for anchor scores was pre-trained on
+       ICLR 2023-2024 data (papers or reviews) prior to the analysis?
+     - If contamination exists, does it affect distributional comparisons or
+       only absolute scores, and can the analysis be replicated with a model
+       known to have no contamination?
+     - What explains the v6RF observation that ICLR 2025 data is 'much worse'?
+       Could this be a sign of contamination effects?
+   Decision impact to apply after verification: If the contamination claim is
+   substantiated and cannot be mitigated, the paper's empirical evidence
+   collapses, making a strong case for rejection. If the claim is
+   unsubstantiated or can be addressed (e.g., by using a different LLM or
+   showing robustness), the paper retains its empirical grounding, and the
+   remaining weaknesses may be handled in revision, potentially leading to
+   accept.
+   Priority: High
+   AC validation:
+     Exists: [ ] Yes  [ ] No  [ ] Uncertain
+     Useful for AC decision: [ ] Yes  [ ] No  [ ] Uncertain
+     Comment: __________
+
+Author rebuttal evidence: excluded by run configuration.</pre>
+            </details>
+            <p class="stage-note" style="margin-top:22px" data-i18n="deliv.ac.note">这就是 ac_note 字段的原文，勾选框在报告里是空的。AC 在 Debug Console 或 Report Viewer 里回填后导出 -validated.json，原文件不被覆盖。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Author view. The only proposal-layer panel on the page: CHART has no
+         author-side schema field, so this demonstrates an integration point
+         rather than an existing capability. Labelled as such in three places
+         so it cannot be mistaken for shipped behaviour. -->
+    <div class="panel reveal" id="panelAuthor" hidden>
+      <div class="ac-head">
+        <div>
+          <div class="ac-eyebrow" data-i18n="author.eyebrow">投稿人视角 · 提案层 · 当前 schema 未建模</div>
+          <h3 class="ac-title" data-i18n="author.title">作者收到 review 和分数之后，也可以反向给这条 review 打分。</h3>
+        </div>
+        <div class="ac-gate">
+          <span class="badge badge-hot" data-i18n="author.badge">未建模</span>
+        </div>
+      </div>
+
+      <div class="ac-body">
+        <h4 class="aform-h" data-i18n="author.recv.h">投稿人收到的内容</h4>
+        <p class="stage-note" data-i18n="author.recv.note">只有提交分数、维度分和 review 正文。上面那封校准澄清请求不会发给作者 —— 它属于系统与 reviewer、AC 之间的环节。</p>
+
+        <dl class="kv">
+          <div><dt>review</dt><dd>review_156R</dd></div>
+          <div><dt>rating</dt><dd class="accent">3 / 6 · Weak Reject</dd></div>
+          <div><dt>confidence</dt><dd>4 / 5</dd></div>
+          <div><dt>venue</dt><dd>icml</dd></div>
+        </dl>
+
+        <div class="dims">
+          <div><span>support</span><b>2</b></div>
+          <div><span>significance</span><b>3</b></div>
+          <div><span>discussion_potential</span><b>4</b></div>
+          <div><span>argument_clarity</span><b>3</b></div>
+          <div><span>related_work</span><b>3</b></div>
+        </div>
+
+        <div class="quote"><span data-i18n="stage.0.strengths">strengths（reviewer 原文摘要）</span>The topic is timely and relevant to large AI/ML conferences. The paper is clearly written and supports its position with empirical analyses. The reviewer expects substantial interest in discussing or debating the proposal.</div>
+        <div class="quote"><span data-i18n="stage.0.weaknesses">weaknesses（reviewer 原文摘要）</span>The reviewer is not fully convinced that Figure 2a illustrates the claimed problem. Some empirical figures would be stronger with error bars, reliability estimates, or correlation statistics. The analysis could better separate score similarity from rationale similarity.</div>
+
+        <form class="aform" id="authorForm" novalidate>
+          <h4 class="aform-h" data-i18n="author.form.h">对这条 review 打分</h4>
+          <p class="aform-note" data-i18n="author.form.note">四个维度对齐 CHART 实际检查的轴：具体程度、分数与理由一致性、论文证据支撑、专业性。作者的打分是一条独立信号，不参与上面的 anchor 计算，也不会改写 reviewer 的分数。</p>
+
+          <fieldset class="rate">
+            <legend><span data-i18n="author.q1">理由是否具体到可以据此修改论文？</span><span class="rate-hint" data-i18n="author.q1.hint">1 = 全是笼统措辞　·　5 = 每条都能定位到具体位置</span></legend>
+            <div class="rate-opts">
+              <label class="rate-opt"><input type="radio" name="q1" value="1"><span>1</span></label>
+              <label class="rate-opt"><input type="radio" name="q1" value="2"><span>2</span></label>
+              <label class="rate-opt"><input type="radio" name="q1" value="3"><span>3</span></label>
+              <label class="rate-opt"><input type="radio" name="q1" value="4"><span>4</span></label>
+              <label class="rate-opt"><input type="radio" name="q1" value="5"><span>5</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="rate">
+            <legend><span data-i18n="author.q2">给出的分数与文字理由是否一致？</span><span class="rate-hint" data-i18n="author.q2.hint">1 = 明显不一致　·　5 = 完全一致</span></legend>
+            <div class="rate-opts">
+              <label class="rate-opt"><input type="radio" name="q2" value="1"><span>1</span></label>
+              <label class="rate-opt"><input type="radio" name="q2" value="2"><span>2</span></label>
+              <label class="rate-opt"><input type="radio" name="q2" value="3"><span>3</span></label>
+              <label class="rate-opt"><input type="radio" name="q2" value="4"><span>4</span></label>
+              <label class="rate-opt"><input type="radio" name="q2" value="5"><span>5</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="rate">
+            <legend><span data-i18n="author.q3">评价是否指向论文里的具体内容？</span><span class="rate-hint" data-i18n="author.q3.hint">1 = 没有引用任何论文内容　·　5 = 处处有据</span></legend>
+            <div class="rate-opts">
+              <label class="rate-opt"><input type="radio" name="q3" value="1"><span>1</span></label>
+              <label class="rate-opt"><input type="radio" name="q3" value="2"><span>2</span></label>
+              <label class="rate-opt"><input type="radio" name="q3" value="3"><span>3</span></label>
+              <label class="rate-opt"><input type="radio" name="q3" value="4"><span>4</span></label>
+              <label class="rate-opt"><input type="radio" name="q3" value="5"><span>5</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="rate">
+            <legend><span data-i18n="author.q4">表述是否专业、具建设性？</span><span class="rate-hint" data-i18n="author.q4.hint">1 = 不专业　·　5 = 专业且具建设性</span></legend>
+            <div class="rate-opts">
+              <label class="rate-opt"><input type="radio" name="q4" value="1"><span>1</span></label>
+              <label class="rate-opt"><input type="radio" name="q4" value="2"><span>2</span></label>
+              <label class="rate-opt"><input type="radio" name="q4" value="3"><span>3</span></label>
+              <label class="rate-opt"><input type="radio" name="q4" value="4"><span>4</span></label>
+              <label class="rate-opt"><input type="radio" name="q4" value="5"><span>5</span></label>
+            </div>
+          </fieldset>
+
+          <div class="acheck">
+            <input type="checkbox" id="authorAc">
+            <label for="authorAc"><span class="acheck-main" data-i18n="author.check">希望 AC 复核这条 review</span><span data-i18n="author.check.hint">只作为作者请求记录，不自动触发任何流程。</span></label>
+          </div>
+
+          <div class="afield">
+            <label for="authorComment" data-i18n="author.comment">补充说明（选填）</label>
+            <textarea id="authorComment" rows="3" data-i18n-attr="placeholder:author.comment.ph" placeholder="例如：哪一条意见你认为与论文实际内容不符，以及依据是什么。"></textarea>
+          </div>
+
+          <div class="aform-bar">
+            <button class="btn btn-primary btn-sm" type="submit" id="authorSubmit" data-i18n="author.submit">提交打分</button>
+            <button class="btn btn-ghost btn-sm" type="button" id="authorReset" data-i18n="author.reset">清空</button>
+            <span class="aform-out" id="authorOut" aria-live="polite"></span>
+          </div>
+        </form>
+
+        <div class="flag flag-ok" style="margin-top:24px"><b>scope</b><span data-i18n="author.bound">为什么这一块单独标注：CHART 当前版本里没有任何作者侧字段。ac_validation 收的是 AC 的判断，followup 收的是 reviewer 的选择，两者都不含作者。这个界面演示的是一个尚未实现的接入点，不是已有能力。</span></div>
       </div>
     </div>
     </div>
@@ -255,6 +434,7 @@
       <span class="chip" data-i18n="demo.bounds.2">不上传 review</span>
       <span class="chip" data-i18n="demo.bounds.3">不需要 API key</span>
       <span class="chip" data-i18n="demo.bounds.4">不代替人工判断</span>
+      <span class="chip" data-i18n="demo.bounds.5">打分不回传</span>
     </div>
   </div>
 </section>
@@ -270,9 +450,9 @@
         <h3 data-i18n="checks.1.h3">分数与理由不一致</h3>
         <p data-i18n="checks.1.p">文字理由支持的 anchor 区间和 reviewer 提交分数不在同一位置，并记录方向、残差与 severity。</p>
         <div class="gauge">
-          <div class="gauge-row"><b>4.0-5.0</b><span data-i18n="checks.1.r1">anchor range</span></div>
-          <div class="gauge-row" style="margin-top:8px"><b class="accent">-1.0</b><span data-i18n="checks.1.r2">residual, submitted 3</span></div>
-          <div class="gauge-row" style="margin-top:8px"><b>low</b><span data-i18n="checks.1.r3">severity, stable, direction 100%</span></div>
+          <div class="gauge-row"><b>5.27-6.00</b><span data-i18n="checks.1.r1">anchor range</span></div>
+          <div class="gauge-row" style="margin-top:8px"><b class="accent">-2.271</b><span data-i18n="checks.1.r2">residual, submitted 3</span></div>
+          <div class="gauge-row" style="margin-top:8px"><b class="accent">high</b><span data-i18n="checks.1.r3">severity, stability moderate</span></div>
         </div>
       </div>
 
@@ -280,9 +460,9 @@
         <h3 data-i18n="checks.2.h3">证据缺口</h3>
         <p data-i18n="checks.2.p">关键判断缺少论文证据，或与论文内容冲突。论文在手时仍可能不可核实，因为 review 的表述无法定位到具体位置。</p>
         <div class="dims">
-          <div class="hot"><span>unverifiable</span><b>3 / 3</b></div>
+          <div class="hot"><span>under_supported</span><b>4 / 4</b></div>
           <div><span>paper_available</span><b>true</b></div>
-          <div><span>claim type</span><b>experiments_insufficient</b></div>
+          <div><span>claim type</span><b>experiments_insufficient ×3</b></div>
           <div><span data-i18n="checks.2.k4">每条缺失项</span><b data-i18n="checks.2.v4">逐条列出</b></div>
           <div><span>review</span><b>review_156R · 3 / 6</b></div>
         </div>
@@ -290,13 +470,13 @@
 
       <div class="cell">
         <h3 data-i18n="checks.3.h3">Rubric 权重问题</h3>
-        <p data-i18n="checks.3.p">某个维度被赋予决定性权重，但 review 没有解释原因。系统只标注这个空缺，不改写权重。同一篇论文的另一条 review 命中了这一类。</p>
+        <p data-i18n="checks.3.p">某个维度被赋予决定性权重，但 review 没有解释原因。这次运行没有命中这一类：唯一被路由到 rubric 检查的 review 判为 balanced，系统就照实记 balanced。</p>
         <div class="dims">
-          <div class="hot"><span>dominant</span><b>discussion_potential</b></div>
-          <div><span>status</span><b>unexplained_high_weight</b></div>
-          <div><span data-i18n="checks.3.k3">维度分</span><b>3 / 3 / 4 / 3 / 3</b></div>
-          <div><span data-i18n="checks.3.k4">overall</span><b data-i18n="checks.3.v4">5，高于全部维度分</b></div>
-          <div><span>review</span><b>review_gr3d · 5 / 6</b></div>
+          <div><span>dominant</span><b>none</b></div>
+          <div><span>status</span><b>balanced</b></div>
+          <div><span data-i18n="checks.3.k3">维度分</span><b>2 / 3 / 4 / 3 / 3</b></div>
+          <div><span data-i18n="checks.3.k4">本次结论</span><b data-i18n="checks.3.v4">未命中，照实记录</b></div>
+          <div><span>review</span><b>review_156R · 3 / 6</b></div>
         </div>
       </div>
 
@@ -331,7 +511,7 @@
         </div>
         <div class="figcap">
           <h3 data-i18n="checks.4.h3">门控只有两个出口</h3>
-          <p data-i18n-html="checks.4.p_html">三个 specialist 由 planner 调度完毕后，结论要先过 reliability gate。不通过时失败原因会写回上下文让模型重新诊断；若始终不通过，记录标记为 degraded，而不是悄悄输出一份看起来完整的结论。完整流程见 <a href="#arch">架构图</a>。</p>
+          <p data-i18n-html="checks.4.p_html">两个 specialist 由 planner 调度完毕后，结论要先过 reliability gate。不通过时失败原因会写回上下文让模型重新诊断；若始终不通过，记录标记为 degraded，而不是悄悄输出一份看起来完整的结论。完整流程见 <a href="#arch">架构图</a>。</p>
         </div>
       </div>
     </div>
@@ -565,7 +745,7 @@
             <text class="n-sub" x="470" y="377" text-anchor="middle" data-i18n="arch.2.c2">跨 review 比对</text>
             <path class="e-line" d="M604,366 L648,366" marker-end="url(#a2-arrow)"/>
             <text class="n-label" x="800" y="360" text-anchor="middle" data-i18n="arch.2.c3">validated pool</text>
-            <text class="n-sub" x="800" y="377" text-anchor="middle">A001 · A003 …</text>
+            <text class="n-sub" x="800" y="377" text-anchor="middle">8 candidates → A001</text>
 
             <!-- Leaves from the pool, the last sub-step, and elbows left into
                  the first node of the next row. -->
@@ -728,7 +908,7 @@ $ python scripts/run_pipeline.py \
     </div>
   </div>
 </footer>
-<script src="i18n.js?v=6"></script>
-<script src="demo.js?v=11"></script>
+<script src="i18n.js?v=8"></script>
+<script src="demo.js?v=13"></script>
 </body>
 </html>

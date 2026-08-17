@@ -1,9 +1,12 @@
 /* CHART showcase: step viewer + simulated run.
    All values below are transcribed from one real provider run:
-   outputs/experiments/paper-post-20260629-115601/llmscoring1_paper.json
-   (venue: icml, paper supplied as user PDF, 76796 extracted chars).
-   Both the reviewer view and the AC view read from that same run so the
-   numbers agree across views. Nothing is invented.
+   outputs/experiments/paper-post-20260817/llmscoring1_paper.json
+   (venue: icml, paper supplied as user PDF, 76797 extracted chars,
+   provider deepseek / deepseek-v4-pro).
+   The reviewer view, the AC view and the review text shown to the author all
+   read from that same run so the numbers agree across views. Nothing is
+   invented; the author rating form is the one exception and is labelled as a
+   proposal-layer surface because no author-side field exists in the schema.
    Step timings are display pacing only, which is why the log column
    shows step indices rather than a fabricated wall clock. */
 
@@ -32,11 +35,11 @@
           '<div><dt>submitted</dt><dd>Rating 3 / 6 · Weak Reject</dd></div>' +
           '<div><dt>confidence</dt><dd>4 / 5</dd></div>' +
           '<div><dt>paper source</dt><dd class="ok">user_pdf</dd></div>' +
-          '<div><dt>extracted text</dt><dd>76,796 chars</dd></div>' +
+          '<div><dt>extracted text</dt><dd>76,797 chars · truncated</dd></div>' +
           '</dl>' +
           '<div class="quote"><span>' + t("stage.0.strengths") + '</span>' +
           'The topic is timely and relevant to large AI/ML conferences. The paper is clearly written and supports its ' +
-          'position with empirical analyses. The reviewer expects substantial interest in discussing the proposal.</div>' +
+          'position with empirical analyses. The reviewer expects substantial interest in discussing or debating the proposal.</div>' +
           '<div class="quote"><span>' + t("stage.0.weaknesses") + '</span>' +
           'The reviewer is not fully convinced that Figure 2a illustrates the claimed problem. Some empirical figures ' +
           'would be stronger with error bars, reliability estimates, or correlation statistics. The analysis could ' +
@@ -47,24 +50,34 @@
         note: t("stage.1.note"),
         html:
           '<dl class="kv">' +
-          '<div><dt>anchor range</dt><dd class="accent">4.0 - 5.0</dd></div>' +
-          '<div><dt>residual</dt><dd class="accent">-1.0</dd></div>' +
-          '<div><dt>severity</dt><dd class="faint">low</dd></div>' +
-          '<div><dt>stability</dt><dd class="ok">stable</dd></div>' +
-          '<div><dt>samples</dt><dd>3 · midpoint σ 0.0</dd></div>' +
-          '<div><dt>direction agreement</dt><dd class="ok">100%</dd></div>' +
+          '<div><dt>anchor range</dt><dd class="accent">5.27 - 6.00</dd></div>' +
+          '<div><dt>residual</dt><dd class="accent">-2.271</dd></div>' +
+          '<div><dt>severity</dt><dd class="accent">high</dd></div>' +
+          '<div><dt>stability</dt><dd class="faint">moderate</dd></div>' +
+          '<div><dt>samples</dt><dd>3 · midpoint σ 0.7744</dd></div>' +
+          '<div><dt>context mode</dt><dd class="ok">paper_and_rationale</dd></div>' +
           '</dl>' +
           '<div class="quote"><span>' + t("stage.1.reasoning") + '</span>' +
-          'The reviewer finds the paper timely, relevant, and clearly written with empirical support, and expects ' +
-          'substantial discussion. However, concerns about Figure 2a’s clarity, missing statistical rigor (error bars, ' +
-          'correlations, reliability), and incomplete separation of score vs. rationale similarity keep it at a ' +
-          'borderline accept to accept level.</div>' +
+          'Anchor derived from 7 review-grounded contributions (4 strengths, 3 weaknesses).</div>' +
           '<ul class="list-tight">' +
           '<li>' + t("stage.1.l1") + '</li>' +
           '<li>' + t("stage.1.l2") + '</li>' +
           '<li>' + t("stage.1.l3") + '</li>' +
           '</ul>' +
-          '<div class="flag"><b>low</b><span>' + t("stage.1.flag") + '</span></div>'
+          /* The weight column is what makes the high anchor auditable: the two
+             core strengths outweigh all three weaknesses by two orders of
+             magnitude, which is visible here rather than asserted. */
+          '<p class="stage-note" style="margin-top:20px;color:var(--text)"><b>' + t("stage.1.contrib") + '</b></p>' +
+          '<div class="dims" style="margin-top:10px">' +
+          '<div class="hot"><span>core · strength · supported</span><b>4.5 → +0.914</b></div>' +
+          '<div class="hot"><span>core · strength · supported</span><b>4.5 → +0.226</b></div>' +
+          '<div><span>supporting · strength</span><b>0.6 → +0.030</b></div>' +
+          '<div><span>minor · strength · not_checkable</span><b>0.144 → +0.007</b></div>' +
+          '<div><span>caveat · weakness ×3</span><b>0.027-0.036 → Σ -0.005</b></div>' +
+          '<div><span>baseline 3.5 · signed movement</span><b>+2.371 → 5.871</b></div>' +
+          '</div>' +
+          '<p class="stage-note" style="margin-top:18px">' + t("stage.1.contrib_note") + '</p>' +
+          '<div class="flag"><b>high</b><span>' + t("stage.1.flag") + '</span></div>'
       },
       {
         title: t("stage.2.title"),
@@ -72,23 +85,25 @@
         html:
           '<dl class="kv">' +
           '<div><dt>paper available</dt><dd class="ok">true</dd></div>' +
-          '<div><dt>key claims</dt><dd>3</dd></div>' +
-          '<div><dt>status</dt><dd class="accent">3 × unverifiable</dd></div>' +
-          '<div><dt>claim types</dt><dd>other · experiments_insufficient ×2</dd></div>' +
+          '<div><dt>key claims</dt><dd>4</dd></div>' +
+          '<div><dt>status</dt><dd class="accent">4 × under_supported</dd></div>' +
+          '<div><dt>claim types</dt><dd>experiments_insufficient ×3 · strong_contribution</dd></div>' +
           '</dl>' +
           '<div class="quote"><span>' + t("stage.2.claim1") + '</span>' +
-          'Figure 2a does not convincingly illustrate the claimed problem.</div>' +
+          'The reviewer is not fully convinced that Figure 2a illustrates the claimed problem.</div>' +
           '<ul class="list-tight">' +
           '<li>' + t("stage.2.m1") + '</li>' +
           '<li>' + t("stage.2.m2") + '</li>' +
-          '<li>' + t("stage.2.m3") + '</li>' +
           '</ul>' +
           '<ul class="list-tight" style="margin-top:18px">' +
           '<li><span><b>' + t("stage.2.c2label") + '</b> Some empirical figures would be stronger with error bars, ' +
           'reliability estimates, or correlation statistics. ' + t("stage.2.c2") + '</span></li>' +
-          '<li><span><b>' + t("stage.2.c3label") + '</b> The analysis does not adequately separate score similarity ' +
+          '<li><span><b>' + t("stage.2.c3label") + '</b> The analysis could better separate score similarity ' +
           'from rationale similarity. ' + t("stage.2.c3") + '</span></li>' +
-          '</ul>'
+          '<li><span><b>' + t("stage.2.c4label") + '</b> The paper is clearly written and supports its position ' +
+          'with empirical analyses. ' + t("stage.2.c4") + '</span></li>' +
+          '</ul>' +
+          '<p class="stage-note" style="margin-top:18px">' + t("stage.2.after") + '</p>'
       },
       {
         title: t("stage.3.title"),
@@ -99,11 +114,11 @@
           '<div><dt>status</dt><dd class="ok">balanced</dd></div>' +
           '</dl>' +
           '<div class="dims">' +
-          '<div><span>Support</span><b>2 / 4</b></div>' +
-          '<div><span>Significance</span><b>3 / 4</b></div>' +
-          '<div><span>Discussion Potential</span><b>4 / 4</b></div>' +
-          '<div><span>Argument Clarity</span><b>3 / 4</b></div>' +
-          '<div><span>Related Work</span><b>3 / 4</b></div>' +
+          '<div><span>support</span><b>2</b></div>' +
+          '<div><span>significance</span><b>3</b></div>' +
+          '<div><span>discussion_potential</span><b>4</b></div>' +
+          '<div><span>argument_clarity</span><b>3</b></div>' +
+          '<div><span>related_work</span><b>3</b></div>' +
           '</div>' +
           '<div class="flag flag-ok"><b>balanced</b><span>' + t("stage.3.flag") + '</span></div>' +
           '<p class="stage-note" style="margin-top:20px">' + t("stage.3.after") + '</p>'
@@ -113,51 +128,124 @@
         note: t("stage.4.note"),
         html:
           '<dl class="kv">' +
-          '<div><dt>reliability gate</dt><dd class="ok">passed · 0 failed checks</dd></div>' +
+          '<div><dt>reliability gate</dt><dd class="ok">passed · repaired</dd></div>' +
           '<div><dt>care plan</dt><dd class="accent">reviewer_calibration_challenge</dd></div>' +
-          '<div><dt>synthesis confidence</dt><dd>0.75</dd></div>' +
+          '<div><dt>synthesis confidence</dt><dd>0.92</dd></div>' +
           '<div><dt>intended judgment possible</dt><dd class="ok">true</dd></div>' +
           '</dl>' +
-          '<p class="stage-note" style="margin-top:22px">' + t("stage.4.prompt") + '</p>' +
-          '<ul class="opts">' +
-          '<li><b>A</b>' + t("stage.4.a") + '</li>' +
-          '<li><b>B</b>' + t("stage.4.b") + '</li>' +
-          '<li><b>C</b>' + t("stage.4.c") + '</li>' +
-          '<li><b>D</b>' + t("stage.4.d") + '</li>' +
-          '</ul>' +
-          '<p class="stage-note">' + t("stage.4.after") + '</p>' +
-          '<ul class="list-tight"><li>' + t("stage.4.out1") + '</li>' +
-          '<li>' + t("stage.4.out2") + '</li></ul>'
+          /* The gate rejected the first submission in this run. Showing both
+             attempts is the point: the arch diagram claims a feedback edge
+             back to the planner, and this run actually took it. */
+          '<div class="flag"><b>rejected</b><span>' + t("stage.4.gate1") + '</span></div>' +
+          '<div class="flag flag-ok"><b>passed</b><span>' + t("stage.4.gate2") + '</span></div>' +
+          '<ul class="list-tight" style="margin-top:18px"><li>' + t("stage.4.out1") + '</li>' +
+          '<li>' + t("stage.4.out2") + '</li></ul>' +
+          REVIEWER_LETTER()
       }
     ];
   }
 
+  /* The reviewer-facing artifact, verbatim from the run's rendered_output.
+     Field labels stay English because render.py emits English; only the
+     surrounding annotations are translated. Issues 3 and 4 sit in a <details>
+     so the panel does not grow past the log. */
+  function REVIEWER_LETTER() {
+    function issue(n, wrote, why, asks) {
+      return '<div class="deliv-issue"><b>Issue ' + n + '</b>' +
+        '<div class="deliv-wrote"><span>' + t("deliv.r.wrote") + '</span><em>“' + wrote + '”</em></div>' +
+        '<p class="deliv-why"><b>' + t("deliv.r.why") + '</b>' + why + '</p>' +
+        '<p class="deliv-why"><b>' + t("deliv.r.ask") + '</b></p>' +
+        '<ul class="deliv-ask">' + asks.map(function (a) { return '<li>' + a + '</li>'; }).join("") + '</ul></div>';
+    }
+
+    return '<div class="deliv">' +
+      '<div class="deliv-bar"><span class="deliv-path">' + t("deliv.r.path") + '</span>' +
+      '<span class="badge badge-hot">' + t("deliv.badge") + '</span></div>' +
+      '<div class="deliv-body">' +
+      '<h4 class="deliv-h">' + t("deliv.r.h") + '</h4>' +
+
+      '<div class="deliv-sec"><b>' + t("deliv.r.sum") + '</b>' +
+      '<div class="deliv-score">' +
+      '<div><i>' + t("deliv.r.sub") + '</i><b>3 / 6</b></div>' +
+      '<div><i>' + t("deliv.r.anchor") + '</i><b class="hot">≈ 5.9 / 6</b></div>' +
+      '</div>' +
+      '<p>The submitted score and the rationale provided are not fully aligned, as the strengths described appear ' +
+      'to outweigh the identified concerns. Clarification on how the concerns lead to a Weak Reject is needed, ' +
+      'or the score should be revised to better reflect the rationale.</p></div>' +
+
+      '<div class="deliv-sec"><b>' + t("deliv.r.issues") + '</b>' +
+      issue(1,
+        "The reviewer is not fully convinced that Figure 2a illustrates the claimed problem.",
+        "The claim that Figure 2a does not illustrate the problem lacks specificity, making it difficult to determine how much weight it should carry in the score.",
+        ["What specific aspect of Figure 2a fails to illustrate the problem?",
+         "What additional analysis or visualization would resolve this concern?",
+         "How does this concern affect the overall score given other strengths?"]) +
+      issue(2,
+        "Some empirical figures would be stronger with error bars, reliability estimates, or correlation statistics.",
+        "The request for additional statistics is too general; without knowing which figures and which statistics are missing, it is unclear how this affects the paper's conclusions.",
+        ["Please identify the exact figure(s) that lack error bars, reliability estimates, or correlation statistics.",
+         "Which specific statistic is missing from each, and why is it essential for the paper's claims?",
+         "How does this concern contribute to the score?"]) +
+      '<details class="deliv-more"><summary>' + t("deliv.r.more") + '</summary>' +
+      issue(3,
+        "The analysis could better separate score similarity from rationale similarity.",
+        "The observation about separating score similarity from rationale similarity is not detailed enough to understand its significance or its impact on the score.",
+        ["Which part of the analysis conflates score similarity and rationale similarity?",
+         "How would a better separation affect the paper's conclusions or the calibration proposal?",
+         "How does this concern influence the final score?"]) +
+      issue(4,
+        "The paper is clearly written and supports its position with empirical analyses.",
+        "The positive assessment of the paper's clarity and empirical support is not linked to specific evidence, making it hard to weigh against the identified weaknesses.",
+        ["Which specific empirical analyses are being referred to?",
+         "How do they support the paper's position?",
+         "How do they balance the concerns about figure clarity and missing statistics?"]) +
+      '</details></div>' +
+
+      '<div class="deliv-sec"><b>' + t("deliv.r.opts") + '</b>' +
+      '<ul class="deliv-opts">' +
+      '<li>Keep the score and add concrete evidence showing why the concerns are decisive.</li>' +
+      '<li>Revise the score if some concerns are serious but not decisive.</li>' +
+      '<li>Keep the concerns while marking some as limitations rather than central reasons for the score.</li>' +
+      '<li>Distinguish which concerns affect the main contribution and which affect only part of the evidence.</li>' +
+      '</ul></div>' +
+
+      '<p class="stage-note" style="margin-top:22px">' + t("deliv.r.note") + '</p>' +
+      '</div></div>';
+  }
+
   var STAGES = buildStages();
 
+  /* Transcribed from the run's agent_steps + agent_events. Row 04-05 is the
+     rejected first submission: the model asked for adjust_score and the
+     reliability gate refused it, which is why rows 06-09 exist at all. */
   var LOG = [
-    ["01", "loaders: parsed review_156R, venue=icml, paper_source=user_pdf, 76796 chars"],
-    ["02", "score_anchor: 3 samples, midpoint_std=0.0, direction_agreement=1.0"],
-    ["03", "score_anchor: <b>anchor_range=(4.0, 5.0) residual=-1 severity=low</b> stability=stable"],
-    ["04", "planner: requested rubric_weight"],
-    ["05", "rubric_weight: dominant=none status=balanced"],
-    ["06", "planner: requested evidence_grounding"],
-    ["07", "evidence_grounding: paper_available=true, 3 claims unverifiable"],
-    ["08", "submit_diagnosis: care_plan=reviewer_calibration_challenge confidence=0.75"],
-    ["09", "reliability: gate passed, failed_checks=0, repaired=false"],
-    ["10", "<u>wrote llmscoring1_paper.json · review_156R CaseReport</u>"]
+    ["01", "loaders: parsed review_156R, venue=icml, paper_source=user_pdf, 76797 chars"],
+    ["02", "score_anchor: 3 samples, midpoint_std=0.7744, stability=moderate"],
+    ["03", "score_anchor: <b>anchor_range=(5.2714, 6.0) residual=-2.271 severity=high</b>"],
+    ["04", "submit_diagnosis: care_plan=adjust_score confidence=0.95"],
+    ["05", "reliability_gate: <b>rejected</b> failed_checks=[adjust_score_but_intent_possible]"],
+    ["06", "planner: requested rubric_weight"],
+    ["07", "rubric_weight: dominant=none status=balanced"],
+    ["08", "planner: requested evidence_grounding"],
+    ["09", "evidence_grounding: paper_available=true, 4 claims under_supported"],
+    ["10", "submit_diagnosis: care_plan=reviewer_calibration_challenge confidence=0.92"],
+    ["11", "reliability: gate passed, failed_checks=0, repaired=true"],
+    ["12", "<u>wrote llmscoring1_paper.json · review_156R CaseReport</u>"]
   ];
 
-  /* Which rail step each log row lights up. The specialists run one at a
-     time and the planner chooses the order, so this run did rubric before
-     evidence: the indices intentionally go 1 -> 3 -> 2 -> 4. */
-  var LOG_STAGE = [0, 1, 1, 3, 3, 2, 2, 4, 4, 4];
+  /* Which rail step each log row lights up. The planner chooses the order and
+     the gate can send it backwards, so this run went 1 -> 4 -> 3 -> 2 -> 4:
+     anchor, a rejected record attempt, then rubric and evidence, then the
+     record again. The indices are deliberately non-monotonic. */
+  var LOG_STAGE = [0, 1, 1, 4, 4, 3, 3, 2, 2, 4, 4, 4];
 
   /* How long each row stays on screen before the next one lands, in ms.
      Not uniform: a row that only announces a step ("planner: requested ...")
      needs less time than one that swaps a full panel of numbers in. The rows
      that replace the panel body get the long dwells so there is time to read
-     the result before the next step takes over. Sum is ~9s. */
-  var DWELL = [1000, 700, 1150, 650, 1050, 650, 1100, 1050, 900, 900];
+     the result before the next step takes over. The rejection row is held
+     longer because the backwards jump needs a beat to register. Sum is ~11s. */
+  var DWELL = [900, 650, 1100, 850, 1200, 600, 950, 600, 1050, 950, 850, 850];
   var LEAD_IN = 380;
 
   var body = document.getElementById("stageBody");
@@ -277,12 +365,13 @@
         logEl.scrollTop = logEl.scrollHeight;
         bar.style.width = Math.round(((n + 1) / LOG.length) * 100) + "%";
 
-        /* Row 1 announces that anchor scoring started but has no result
-           yet, so that step renders as pending until row 2 carries the
-           computed range. Same for the two planner rows. */
+        /* Rows that announce a step without carrying its result render the
+           step as pending: row 02 (anchor sampling started), row 04 (the
+           record attempt that has not been judged yet) and the two planner
+           rows 06 and 08. Zero-based, so 1 / 3 / 5 / 7. */
         current = LOG_STAGE[n];
         paint(current, {
-          pending: n === 1 || n === 3 || n === 5,
+          pending: n === 1 || n === 3 || n === 5 || n === 7,
           visited: LOG_STAGE.slice(0, n + 1)
         });
 
@@ -317,17 +406,20 @@
     reveals.forEach(function (el) { el.classList.add("in"); });
   }
 
-  /* reviewer / AC view switch. Both views read the same run, so this only
-     changes which slice of that run is on screen. Switching away from a
-     running diagnosis stops it rather than leaving timers firing into a
-     hidden panel. */
+  /* reviewer / AC / author view switch. The first two views read the same run,
+     so switching only changes which slice of that run is on screen. The author
+     view shows the same review_156R text plus a proposal-layer rating form.
+     Switching away from a running diagnosis stops it rather than leaving timers
+     firing into a hidden panel. */
   var viewBtns = {
     reviewer: document.getElementById("viewReviewer"),
-    ac: document.getElementById("viewAc")
+    ac: document.getElementById("viewAc"),
+    author: document.getElementById("viewAuthor")
   };
   var panels = {
     reviewer: document.getElementById("panelReviewer"),
-    ac: document.getElementById("panelAc")
+    ac: document.getElementById("panelAc"),
+    author: document.getElementById("panelAuthor")
   };
   var demoTitle = document.getElementById("demoTitle");
   var demoLede = document.getElementById("demoLede");
@@ -335,7 +427,7 @@
   var activeView = "reviewer";
 
   function setView(name) {
-    if (!panels.reviewer || !panels.ac) return;
+    if (!panels.reviewer || !panels.ac || !panels.author) return;
     if (running) stopRun();
     Object.keys(panels).forEach(function (k) {
       panels[k].hidden = k !== name;
@@ -349,9 +441,75 @@
     if (demoLede) demoLede.innerHTML = t("head." + name + ".lede_html");
   }
 
-  if (viewBtns.reviewer && viewBtns.ac) {
+  if (viewBtns.reviewer && viewBtns.ac && viewBtns.author) {
     viewBtns.reviewer.addEventListener("click", function () { setView("reviewer"); });
     viewBtns.ac.addEventListener("click", function () { setView("ac"); });
+    viewBtns.author.addEventListener("click", function () { setView("author"); });
+  }
+
+  /* Author rating form. Deliberately local-only: no fetch, no storage, no
+     hidden field. The summary line is the whole output, and it says so. The
+     form is a proposal-layer surface because the schema has no author-side
+     field, so there is nothing to post it to even in a real deployment. */
+  var aform = document.getElementById("authorForm");
+  if (aform) {
+    var aout = document.getElementById("authorOut");
+    var aSubmit = document.getElementById("authorSubmit");
+    var aReset = document.getElementById("authorReset");
+    var aAc = document.getElementById("authorAc");
+    var Q = ["q1", "q2", "q3", "q4"];
+    var submitted = false;
+
+    function scores() {
+      return Q.map(function (q) {
+        var hit = aform.querySelector('input[name="' + q + '"]:checked');
+        return hit ? Number(hit.value) : null;
+      }).filter(function (v) { return v !== null; });
+    }
+
+    /* Called on every change and after a locale switch, so the summary never
+       shows a stale language or a stale count. */
+    function paintOut() {
+      var got = scores();
+      if (submitted && got.length === Q.length) {
+        var mean = got.reduce(function (a, b) { return a + b; }, 0) / got.length;
+        aout.textContent = t("author.out.done")
+          .replace("{avg}", mean.toFixed(2))
+          .replace("{ac}", aAc && aAc.checked ? t("author.out.ac") : "");
+        aout.classList.add("filled");
+        return;
+      }
+      aout.classList.remove("filled");
+      aout.textContent = got.length === 0
+        ? t("author.out.empty")
+        : t("author.out.partial").replace("{n}", got.length);
+    }
+
+    aform.addEventListener("change", function () {
+      /* Editing after a submit invalidates the recorded summary, so the state
+         drops back to "in progress" rather than showing a mean for a set of
+         answers the reader has since changed. */
+      if (submitted && scores().length < Q.length) submitted = false;
+      paintOut();
+    });
+
+    aform.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (scores().length < Q.length) { paintOut(); return; }
+      submitted = true;
+      paintOut();
+    });
+
+    if (aReset) {
+      aReset.addEventListener("click", function () {
+        aform.reset();
+        submitted = false;
+        paintOut();
+      });
+    }
+    if (aSubmit) aSubmit.setAttribute("type", "submit");
+    window.CHART_PAINT_AUTHOR_OUT = paintOut;
+    paintOut();
   }
 
   /* architecture figure switch. The two diagrams are alternatives rather than
@@ -410,6 +568,9 @@
     else paint(current);
     paintRunNote();
     setView(activeView);
+    /* The author summary reports live form state for the same reason the run
+       note does, so it is re-derived here instead of being tagged as copy. */
+    if (window.CHART_PAINT_AUTHOR_OUT) window.CHART_PAINT_AUTHOR_OUT();
   }
 
   var langBtns = document.querySelectorAll(".lang-btn");
